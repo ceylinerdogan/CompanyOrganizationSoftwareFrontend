@@ -6,14 +6,17 @@ import { Switch } from '@mui/material';
 
 function App(){
   
-  return(
-      <Router>
-        <Switch>
-          <Route exact path = "/login" component={Login} />
-          <Route exact path = "/reset-password" component={ResetPassword} />
-        </Switch>
-      </Router>
+  return (
+      <div className="App">
+          <h2>SIGN UP</h2>
+          <Login>
+            
+          </Login>
+          
+      </div>
+  );
+      
 
-  )
+ 
 }
 export default App;

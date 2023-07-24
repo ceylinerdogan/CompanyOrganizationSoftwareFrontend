@@ -1,3 +1,5 @@
+import { Label } from '@mui/icons-material';
+import { Button, Input, TextField } from '@mui/material';
 import React, {useState} from 'react';
 
 
@@ -13,7 +15,7 @@ const Login = () => {
         <form onSubmit={handleSubmit}>
             <div>
                 <label htmlFor="email">Email:</label>
-                <input 
+                <TextField 
                     type="text"
                     id="email"
                     value={email}
@@ -23,7 +25,7 @@ const Login = () => {
             </div>
             <div>
                 <label htmlFor="password">Password</label>
-                <input
+                <TextField
                     type="password"
                     id="password"
                     value={password}
@@ -31,7 +33,9 @@ const Login = () => {
                     placeholder="********"
                 />
             </div>
-            <button onClick={handleSubmit} type="submit">Sign In</button>
+            <Button className="signInbtn" onClick={handleSubmit} type="submit">Sign In</Button>
+            <Button className="rstPass" onClick={handleSubmit} type="resetPass" TextLink to ="/resetpassword">Reset Password </Button>
+            
         </form>
     );
 };
