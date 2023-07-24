@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+
+
 const Login = () => {
     const [email,setEmail] = useState('');
     const [password,setPassword] = useState('');
@@ -16,6 +18,7 @@ const Login = () => {
                     id="email"
                     value={email}
                     onChange={(e)=> setEmail(e.target.value)}
+                    placeholder="Email"
                 />
             </div>
             <div>
@@ -25,9 +28,10 @@ const Login = () => {
                     id="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    placeholder="********"
                 />
             </div>
-            <button type="submit">Sign In</button>
+            <button onClick={handleSubmit} type="submit">Sign In</button>
         </form>
     );
 };
