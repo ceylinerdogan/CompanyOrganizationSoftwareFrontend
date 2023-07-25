@@ -1,22 +1,20 @@
 import React from 'react';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {Routes, Route} from 'react-router-dom';
 import Login from './Login';
 import ResetPassword from './ResetPassword';
-import { Switch } from '@mui/material';
+import ActivateUser from './ActivateUser';
+
 
 function App(){
   
   return (
       <div className="App">
-          <h2>SIGN UP</h2>
-          <Login>
-            
-          </Login>
-          
+        <Routes>
+          <Route path="/" element={<Login/>} />
+          <Route path="resetpassword" element={<ResetPassword/>} />
+          <Route path="activateuser" element={<ActivateUser/>} />
+        </Routes>  
       </div>
   );
-      
-
- 
 }
 export default App;

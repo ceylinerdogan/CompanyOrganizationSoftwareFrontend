@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import React,{useState} from 'react';
 
 const ResetPassword = () =>{
@@ -9,11 +9,21 @@ const ResetPassword = () =>{
     };
 
     return(
-        <div>
-            <h2>Reset Password </h2>
-            <input type ="email" value={email} onChange= {(e)=>setEmail(e.target.value)} placeholder ="Email" />
-            <Button onClick={handleResetPassword}>Reset Password</Button>
-        </div>
+        <form>
+            <div>
+            <h2>RESET PASSWORD </h2>
+                <label className="labelEmail" htmlFor="email"> Email:</label>
+                <TextField 
+                    type ="text" 
+                    id="email"
+                    value={email} 
+                    onChange= {(e)=>setEmail(e.target.value)} 
+                    placeholder ="Email" />
+            
+                <Button onClick={handleResetPassword}>Reset Password</Button>
+            </div>
+        </form>
+        
     );
 };
 

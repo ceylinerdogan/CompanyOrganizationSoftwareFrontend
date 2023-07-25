@@ -1,20 +1,26 @@
-import { Label } from '@mui/icons-material';
-import { Button, Input, TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import React, {useState} from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 const Login = () => {
     const [email,setEmail] = useState('');
     const [password,setPassword] = useState('');
-
+    const navigate = useNavigate();
+    
     const handleSubmit = (e) => {
     e.preventDefault();
     };
 
+    function handleClick(event){
+        navigate('/resetpassword');
+    }
+
     return (
         <form onSubmit={handleSubmit}>
+            <h2>SIGN IN</h2>
             <div>
-                <label htmlFor="email">Email:</label>
+                <label className="labelEmail" htmlFor="email">Email:</label>
                 <TextField 
                     type="text"
                     id="email"
@@ -24,7 +30,7 @@ const Login = () => {
                 />
             </div>
             <div>
-                <label htmlFor="password">Password</label>
+                <label className="labelPass" htmlFor="password">Password</label>
                 <TextField
                     type="password"
                     id="password"
@@ -34,8 +40,7 @@ const Login = () => {
                 />
             </div>
             <Button className="signInbtn" onClick={handleSubmit} type="submit">Sign In</Button>
-            <Button className="rstPass" onClick={handleSubmit} type="resetPass" TextLink to ="/resetpassword">Reset Password </Button>
-            
+            <Button type="rstPassbtn" onSubmit={handleClick}>Forgot Password?</Button>
         </form>
     );
 };
