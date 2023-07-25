@@ -20,8 +20,8 @@ const ActivateUser = () =>{
                     value={email} 
                     onChange= {(e)=>setEmail(e.target.value)} 
                     placeholder ="Email" />
-                
-            <label className="labelPassword" htmlFor="password"> Password:</label>
+            <div>
+                <label className="labelPassword" htmlFor="password"> Password:</label>
                 <TextField 
                     type="password"
                     id="password"
@@ -29,15 +29,16 @@ const ActivateUser = () =>{
                     onChange={(e)=>setEmail(e.target.value)}
                     placeholder='********' />
 
-            <label className="labelPassword" htmlFor="password"> Password again:</label>
+            </div>
+            <div>
+                <label className="labelPassword" htmlFor="password"> Password again:</label>
                 <TextField 
                     type="password"
                     id="password"
                     value={password}
                     onChange={(e)=>setEmail(e.target.value)}
                     placeholder='********' />
-
-
+            </div>
                 <Button onClick={handleActivateUser}>Activate User</Button>
             </div>
         </form>

@@ -6,14 +6,18 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
     const [email,setEmail] = useState('');
     const [password,setPassword] = useState('');
-    const navigate = useNavigate();
+    const navigate1 = useNavigate();
+    const navigate2 = useNavigate();
     
     const handleSubmit = (e) => {
     e.preventDefault();
     };
 
-    function handleClick(event){
-        navigate('/resetpassword');
+    function handleClickResetPass(event){
+        navigate1('/resetpassword');
+    }
+    function handleClickActivateUser(event){
+        navigate2('/activateuser');
     }
 
     return (
@@ -39,8 +43,9 @@ const Login = () => {
                     placeholder="********"
                 />
             </div>
-            <Button className="signInbtn" onClick={handleSubmit} type="submit">Sign In</Button>
-            <Button type="rstPassbtn" onSubmit={handleClick}>Forgot Password?</Button>
+            <Button className="signInbtn" onSubmit={handleSubmit} type="submit">Sign In</Button>
+            <Button type="rstPassbtn" onClick={handleClickResetPass}>Forgot Password?</Button>
+            <Button type="activateUserbtn" onClick={handleClickActivateUser}>Activate User</Button>
         </form>
     );
 };

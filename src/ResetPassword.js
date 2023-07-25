@@ -12,6 +12,7 @@ const ResetPassword = () =>{
         <form>
             <div>
             <h2>RESET PASSWORD </h2>
+            <div>
                 <label className="labelEmail" htmlFor="email"> Email:</label>
                 <TextField 
                     type ="text" 
@@ -19,7 +20,8 @@ const ResetPassword = () =>{
                     value={email} 
                     onChange= {(e)=>setEmail(e.target.value)} 
                     placeholder ="Email" />
-            
+            </div>
+                
                 <Button onClick={handleResetPassword}>Reset Password</Button>
             </div>
         </form>
