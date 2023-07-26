@@ -8,6 +8,8 @@ const Login = () => {
     const [password,setPassword] = useState('');
     const navigate1 = useNavigate();
     const navigate2 = useNavigate();
+    const navigate3 = useNavigate();
+    const navigate4 = useNavigate();
     
     const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,9 +18,19 @@ const Login = () => {
     function handleClickResetPass(event){
         navigate1('/resetpassword');
     }
+
     function handleClickActivateUser(event){
         navigate2('/activateuser');
     }
+
+    function handleClicksSetPass(event){
+        navigate3('/setpassword');
+    }
+
+    function handleClickSetNewPass(event){
+        navigate4('/setnewpassword');
+    }
+
 
     return (
         <form onSubmit={handleSubmit}>
@@ -34,7 +46,7 @@ const Login = () => {
                 />
             </div>
             <div>
-                <label className="labelPass" htmlFor="password">Password</label>
+                <label className="labelPass" htmlFor="password">Password:</label>
                 <TextField
                     type="password"
                     id="password"
@@ -43,9 +55,23 @@ const Login = () => {
                     placeholder="********"
                 />
             </div>
-            <Button className="signInbtn" onSubmit={handleSubmit} type="submit">Sign In</Button>
-            <Button type="rstPassbtn" onClick={handleClickResetPass}>Forgot Password?</Button>
-            <Button type="activateUserbtn" onClick={handleClickActivateUser}>Activate User</Button>
+            
+            <div>
+                <Button className="signInbtn" onSubmit={handleSubmit} type="submit">Sign In</Button>
+            </div>
+            <div>
+                <Button type="forgotPassbtn" onClick={handleClickResetPass}>Forgot Password?</Button>
+            </div>
+            <div>
+                <Button type="activateAccbtn" onClick={handleClickActivateUser}>Activate Account</Button>
+            </div>
+            <div>
+                <Button type="rstPassbtn" onClick={handleClicksSetPass}>setpassdeneme</Button>
+            </div>
+            <div>
+                <Button type="activatebtn" onClick={handleClickSetNewPass}>setnewpass</Button>
+            </div>
+            
         </form>
     );
 };

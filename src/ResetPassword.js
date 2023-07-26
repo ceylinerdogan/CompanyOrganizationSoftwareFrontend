@@ -22,7 +22,7 @@ const ResetPassword = () =>{
                     placeholder ="Email" />
             </div>
                 
-                <Button onClick={handleResetPassword}>Reset Password</Button>
+                <Button onClick={handleResetPassword}>Send forgot password mail</Button>
             </div>
         </form>
         

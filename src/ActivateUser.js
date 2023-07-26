@@ -3,7 +3,6 @@ import React,{useState} from 'react';
 
 const ActivateUser = () =>{
     const [email,setEmail] = useState('');
-    const [password,setPassword] = useState('');
 
     const handleActivateUser =()=> {
 
@@ -20,29 +19,9 @@ const ActivateUser = () =>{
                     value={email} 
                     onChange= {(e)=>setEmail(e.target.value)} 
                     placeholder ="Email" />
-            <div>
-                <label className="labelPassword" htmlFor="password"> Password:</label>
-                <TextField 
-                    type="password"
-                    id="password"
-                    value={password}
-                    onChange={(e)=>setEmail(e.target.value)}
-                    placeholder='********' />
-
             </div>
-            <div>
-                <label className="labelPassword" htmlFor="password"> Password again:</label>
-                <TextField 
-                    type="password"
-                    id="password"
-                    value={password}
-                    onChange={(e)=>setEmail(e.target.value)}
-                    placeholder='********' />
-            </div>
-                <Button onClick={handleActivateUser}>Activate User</Button>
-            </div>
+            <Button onClick={handleActivateUser}>Send Activation Mail</Button>
         </form>
-        
     );
 };
 
