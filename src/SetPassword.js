@@ -1,56 +1,114 @@
-import { Button, TextField } from '@mui/material';
+import { Button, Input, TextField } from '@mui/material';
 import React,{useState} from 'react';
+import {basic_eye} from 'react-icons-kit/linea/basic_eye'
+import {basic_eye_closed} from 'react-icons-kit/linea/basic_eye_closed'
+import Icon from 'react-icons-kit';
+import "./index.css"
 
 
 const SetPassword = () =>{
-    const [password,setPassword] = useState('');
-    const [error,setError]=useState('');
+    const [type,setType] = useState("password");
+    const[uppercase,setUpperCase]=useState(false);
+    const[lowercase,setLowerCase]=useState(false);
+    const[numeric,setNumeric]=useState(false);
+    const[specialsymbol,setSpecialSymbol]=useState(false);
+    const[length,setLength]=useState(false);
+    
 
-    const handleSetPassword=()=>{
-        const minLength=8;
-        const maxLength=32;
-        const upperCase=/[A-Z]/;
-        const lowerCase=/[a-z]/;
-        const specialSymbol=/[@$.!-+]/;
-        const numeric=/\d/;
+    const handleChange=(value)=>{
+        const Length=new RegExp('^(?=.{8,32}$)');
 
-        if(password.length<minLength){
-            setError('Password must be at least 8 characters long.');
-        }
-        else if(password.length>maxLength){
-            setError('Password must be maximum 32 characters long.');
-        }
-        else if(!upperCase.test(password)||!lowerCase.test(password)){
-            setError('Password must contain at least one upper case and one lowercase letter.');
-        }
-        else if(!specialSymbol.test(password)){
-            setError('Password must contain at least one special character.');
-        }
-        else if(!numeric.test(password)){
-            setError('Password must contain at least one number.');
+        const upperCase= new RegExp('(?=.*[A-Z])');
+
+        const lowerCase=new RegExp('(?=.*[a-z])');
+
+        const specialSymbol=new RegExp('(?=.*[@$.!+-])');
+
+        const Numeric=new RegExp('(?=.*[0-9])');
+
+        if(lowerCase.test(value)){
+
+            setLowerCase(true);
         }
         else{
-            setError('');
-            console.log('Password is valid.')
+            setLowerCase(false);
         }
+
+        if(upperCase.test(value)){
+
+            setUpperCase(true);
+        }
+        else{
+            setUpperCase(false);
+        }
+
+        if(Numeric.test(value)){
+
+            setNumeric(true);
+        }
+        else{
+            setNumeric(false);
+        }
+        
+        if(specialSymbol.test(value)){
+
+            setSpecialSymbol(true);
+        }
+        else{
+            setSpecialSymbol(false);
+        }
+
+        if(Length.test(value)){
+
+            setLength(true);
+        }
+        else{
+            setLength(false);
+        }
+        
+
+        
     }
 
     return(
         <form>
-            <div>
             <h2>SET PASSWORD </h2>
             <div>
-                <label className="labelPassword" htmlFor="password"> Password:</label>
                 <TextField 
-                    type="password"
+                    type={type}
                     id="password"
-                    value={password}
-                    onChange={(e)=>setPassword(e.target.value)}
-                    placeholder='********' />
+                    placeholder='********'
+                    className="password-input" 
+                    onChange={(e)=>handleChange(e.target.value)} />
+                    {type==="password"?(
+                        <span className="icon-span" onClick={()=>setType("text")}>
+                            <Icon icon={basic_eye_closed} size={25}/>
+                        </span>
+                    ):(
+                        <span className="icon-span" onClick={()=>setType("password")}>
+                            <Icon icon={basic_eye} size={25}/>
+                        </span>
+                    )}
             </div>
-                <Button onClick={handleSetPassword}>Activate Account</Button>
-                {error && <p style={{color:'red'}}>{error}</p>}
-            </div>
+            <main className="validation-tracker">
+                <div className={uppercase?'validated':'not-validated'}>
+                    Must have at least one uppercase character
+                </div>
+                <div className={lowercase?'validated':'not-validated'}>
+                    Must have at least one lowercase character
+                </div>
+                <div className={numeric?'validated':'not-validated'}>
+                    Must have at least one numeric character
+                </div>
+                <div className={specialsymbol?'validated':'not-validated'}>
+                    Must have at least one special symbol among @$.!-+
+                </div>
+                <div className={length?'validated':'not-validated'}>
+                    Password length should be between 8 and 32
+                </div>
+            </main>
+
+                <Button >Activate Account</Button>
         </form>
         
     );
