@@ -1,0 +1,79 @@
+.container{
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    height: 100vh;
+}
+
+.box-login{
+    width: 460px;
+    height: 350px;
+    background-color: rgb(28, 42, 0) ;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 2);
+}
+.login{
+    font-size: 25px;
+    font-weight: bold;
+    margin-top: 0px;
+    position: relative;
+    font-family:Arial, Helvetica, sans-serif;
+    color: whitesmoke;
+}
+.labelEmail{
+    position: relative;
+    right: 172px;
+    font-size: 18px;
+    font-family:Arial, Helvetica, sans-serif;
+    color: whitesmoke;
+}
+
+.emailinput{
+    top: 5px;
+    width: 460px;
+    border: 1px solid blue;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: white;
+    opacity: 0.6;
+    font-family:Arial, Helvetica, sans-serif;
+
+}
+.labelPass{
+    position: relative;
+    top: 15px;
+    right: 188px;
+    font-size: 18px;
+    font-family:Arial, Helvetica, sans-serif;
+    color: whitesmoke;
+}
+
+.passwordinput{
+    top: 20px;
+    width: 460px;
+    border: 1px solid blue;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: white;
+    opacity: 0.6;
+    font-family:Arial, Helvetica, sans-serif;
+}
+.signInbtn{
+    top: 35px;
+}
+.forgotpassbtn{
+    top: 50px;
+    left: 114px;
+}
+.activateaccbtn{
+    top: 6px;
+    right: 120px;
+}
+.setpass{
+    right: 70px;
+}
+.setnewpass{
+
+    left: 70px;
+}

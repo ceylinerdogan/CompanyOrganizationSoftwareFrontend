@@ -1,6 +1,7 @@
 import { Button, TextField } from '@mui/material';
 import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
+import "./Login.css"
 
 
 const Login = () => {
@@ -33,46 +34,80 @@ const Login = () => {
 
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h2>SIGN IN</h2>
-            <div>
-                <label className="labelEmail" htmlFor="email">Email:</label>
-                <TextField 
-                    type="text"
-                    id="email"
-                    value={email}
-                    onChange={(e)=> setEmail(e.target.value)}
-                    placeholder="Email"
-                />
-            </div>
-            <div>
-                <label className="labelPass" htmlFor="password">Password:</label>
-                <TextField
-                    type="password"
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="********"
-                />
+        <div className='container'>
+            <div className='box-login'>
+                <form onSubmit={handleSubmit}>
+                    <h2 className='login'>Login</h2>
+                    <div>
+                        <label className="labelEmail" htmlFor="email">Email Address</label>
+                        <TextField 
+                            type="text"
+                            id="email"
+                            value={email}
+                            onChange={(e)=> setEmail(e.target.value)}
+                            placeholder="Email"
+                            className='emailinput'
+                        />
+                    </div>
+                    <div>
+                        <label className="labelPass" htmlFor="password">Password</label>
+                        <TextField
+                            type="password"
+                            id="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="********"
+                            className='passwordinput'
+                        />
+                    </div>
+                    
+                    <div>
+                        <Button 
+                            className="signInbtn" 
+                            onSubmit={handleSubmit} 
+                            type="submit"
+                            style={{ backgroundColor: '#034900',
+                            color:'WhiteSmoke',
+                            padding:'10px 200px',
+                            borderRadius: '5px',
+                            fontFamily: 'Arial, Helvetica, sans-serif',
+                            }}
+                            >Login</Button>
+                    </div>
+                    <div>
+                        <Button 
+                            className="forgotpassbtn" 
+                            type="click" 
+                            onClick={handleClickResetPass}
+                            style={{ backgroundColor: '#034900',
+                            color:'WhiteSmoke',
+                            padding:'10px 30px',
+                            borderRadius: '5px',
+                            fontFamily: 'Arial, Helvetica, sans-serif',
+                            }}
+                            >Forgot Password?</Button>
+                    </div>
+                    <div>
+                        <Button 
+                            className="activateaccbtn" 
+                            type="click" onClick={handleClickActivateUser}
+                            style={{ backgroundColor: '#034900',
+                            color:'WhiteSmoke',
+                            padding:'9.5px 30px',
+                            borderRadius: '5px',
+                            fontFamily: 'Arial, Helvetica, sans-serif',
+                            }}
+                            >Activate Account</Button>
+                    </div>
+                     <div>
+                        <Button className='setpass' onClick={handleClicksSetPass}>setpass</Button>
+                        <Button  className='setnewpass'onClick={handleClickSetNewPass}>setnewpass</Button>
+                    </div>
+                </form>
             </div>
             
-            <div>
-                <Button className="signInbtn" onSubmit={handleSubmit} type="submit">Sign In</Button>
-            </div>
-            <div>
-                <Button type="forgotPassbtn" onClick={handleClickResetPass}>Forgot Password?</Button>
-            </div>
-            <div>
-                <Button type="activateAccbtn" onClick={handleClickActivateUser}>Activate Account</Button>
-            </div>
-            <div>
-                <Button type="rstPassbtn" onClick={handleClicksSetPass}>setpassdeneme</Button>
-            </div>
-            <div>
-                <Button type="activatebtn" onClick={handleClickSetNewPass}>setnewpass</Button>
-            </div>
-            
-        </form>
+        </div>
+        
     );
 };
 

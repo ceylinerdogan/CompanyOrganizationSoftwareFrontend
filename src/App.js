@@ -5,7 +5,7 @@ import ResetPassword from './ResetPassword';
 import ActivateUser from './ActivateUser';
 import SetNewPassword from './SetNewPassword';
 import SetPassword from './SetPassword';
-
+import "./App.css"
 
 function App(){
   

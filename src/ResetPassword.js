@@ -1,5 +1,6 @@
 import { Button, TextField } from '@mui/material';
 import React,{useState} from 'react';
+import "./ResetPassword.css"
 
 const ResetPassword = () =>{
     const [email,setEmail] = useState('');
@@ -9,23 +10,35 @@ const ResetPassword = () =>{
     };
 
     return(
-        <form>
-            <div>
-            <h2>RESET PASSWORD </h2>
-            <div>
-                <label className="labelEmail" htmlFor="email"> Email:</label>
-                <TextField 
-                    type ="text" 
-                    id="email"
-                    value={email} 
-                    onChange= {(e)=>setEmail(e.target.value)} 
-                    placeholder ="Email" />
+        <div className='wrapperReset'>
+            <div className='box-reset'>
+                <form>
+                    <h2 className='reset-pass'>Reset </h2>
+                    <div>
+                        <div>
+                        <label className="labelEmailReset" htmlFor="email"> Email Adress</label>
+                            <TextField 
+                                type ="text" 
+                                id="email"
+                                value={email} 
+                                onChange= {(e)=>setEmail(e.target.value)} 
+                                placeholder ="Email" 
+                                className='emailInput'/>
+                        </div>
+                            <Button 
+                                className='ResetPass-btn'
+                                onClick={handleResetPassword}
+                                style={{ backgroundColor: '#034900',
+                                color:'WhiteSmoke',
+                                padding:'5px 101px',
+                                borderRadius: '5px',
+                                fontFamily: 'Arial, Helvetica, sans-serif',
+                                }}
+                                >Send forgot password mail</Button>
+                    </div>
+                </form>
             </div>
-                
-                <Button onClick={handleResetPassword}>Send forgot password mail</Button>
-            </div>
-        </form>
-        
+        </div>
     );
 };
 

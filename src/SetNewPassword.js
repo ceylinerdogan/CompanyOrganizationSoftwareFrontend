@@ -3,7 +3,7 @@ import React,{useState} from 'react';
 import {basic_eye} from 'react-icons-kit/linea/basic_eye'
 import {basic_eye_closed} from 'react-icons-kit/linea/basic_eye_closed'
 import Icon from 'react-icons-kit';
-import "./index.css"
+import "./SetNewPassword.css"
 
 const SetNewPassword = () =>{
     const [type,setType] = useState("password");
@@ -68,45 +68,54 @@ const SetNewPassword = () =>{
     
 
     return(
-        <form>
-            <h2>SET NEW PASSWORD </h2>
-            <div>
-                <TextField 
-                    type={type}
-                    id="password"
-                    placeholder='********'
-                    className="password-input" 
-                    onChange={(e)=>handleChange(e.target.value)}/>
-                     {type==="password"?(
-                        <span className="icon-span" onClick={()=>setType("text")}>
-                            <Icon icon={basic_eye_closed} size={25}/>
-                        </span>
-                    ):(
-                        <span className="icon-span" onClick={()=>setType("password")}>
-                            <Icon icon={basic_eye} size={25}/>
-                        </span>
-                    )}
+        <div className='outerBox'>
+            <div className='box-newPass'>
+                <h2 className='resetPass'>Reset Password </h2>
+                <div className='inputBox'>
+                    <TextField 
+                        type={type}
+                        id="password"
+                        placeholder='********'
+                        className="password-input-reset" 
+                        onChange={(e)=>handleChange(e.target.value)}/>
+                        {type==="password"?(
+                            <span className="iconSetNew" onClick={()=>setType("text")}>
+                                <Icon icon={basic_eye_closed} size={25}/>
+                            </span>
+                        ):(
+                            <span className="iconSetNew" onClick={()=>setType("password")}>
+                                <Icon icon={basic_eye} size={25}/>
+                            </span>
+                        )}
+                </div>
+                <main className="validation-tracker">
+                    <div className={uppercase?'validated':'not-validated'}>
+                        At least one uppercase character
+                    </div>
+                    <div className={lowercase?'validated':'not-validated'}>
+                        At least one lowercase character
+                    </div>
+                    <div className={numeric?'validated':'not-validated'}>
+                        At least one numeric character
+                    </div>
+                    <div className={specialsymbol?'validated':'not-validated'}>
+                        At least one special symbol among @$.!-+
+                    </div>
+                    <div className={length?'validated':'not-validated'}>
+                        Length should be between 8 and 32
+                    </div>
+                    <Button
+                        style={{ backgroundColor: '#034900',
+                        color:'WhiteSmoke',
+                        padding:'10px 60px',
+                        borderRadius: '5px',
+                        fontFamily: 'Arial, Helvetica, sans-serif',
+                        fontSize:'16px'}} 
+                        className="reset-pass-btn"
+                        >Reset Password</Button>
+                </main>
             </div>
-            <main className="validation-tracker">
-                <div className={uppercase?'validated':'not-validated'}>
-                    Must have at least one uppercase character
-                </div>
-                <div className={lowercase?'validated':'not-validated'}>
-                    Must have at least one lowercase character
-                </div>
-                <div className={numeric?'validated':'not-validated'}>
-                    Must have at least one numeric character
-                </div>
-                <div className={specialsymbol?'validated':'not-validated'}>
-                    Must have at least one special symbol among @$.!-+
-                </div>
-                <div className={length?'validated':'not-validated'}>
-                    Password length should be between 8 and 32
-                </div>
-            </main>
-                <Button>Reset Password</Button>
-        </form>
-        
+        </div>
     );
 };
 
