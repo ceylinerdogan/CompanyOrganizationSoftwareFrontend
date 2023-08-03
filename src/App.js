@@ -10,14 +10,15 @@ import "./App.css"
 function App(){
   
   return (
+
       <div className="App">
-        <Routes>
+          <Routes>
           <Route path="/" element={<Login/>} />
           <Route path="resetpassword" element={<ResetPassword/>} />
           <Route path="activateuser" element={<ActivateUser/>} />
           <Route path="setpassword" element={<SetPassword/>} />
           <Route path="setnewpassword" element={<SetNewPassword/>} />
-        </Routes>  
+        </Routes>   
       </div>
   );
 }
