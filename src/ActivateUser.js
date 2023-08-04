@@ -27,9 +27,8 @@ const ActivateUser = () =>{
                     <Button 
                         className='activation-btn' 
                         onClick={handleActivateUser}
-                        style={{ backgroundColor: '#034900',
-                        color:'WhiteSmoke',
-                        padding:'5px 100px',
+                        style={{
+                        padding:'10px 100px',
                         borderRadius: '5px',
                         fontFamily: 'Arial, Helvetica, sans-serif',
                         }}

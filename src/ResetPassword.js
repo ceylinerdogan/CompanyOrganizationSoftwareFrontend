@@ -28,10 +28,10 @@ const ResetPassword = () =>{
                             <Button 
                                 className='ResetPass-btn'
                                 onClick={handleResetPassword}
-                                style={{ backgroundColor: '#034900',
-                                color:'WhiteSmoke',
-                                padding:'5px 101px',
+                                style={{
+                                padding:'10px 101px',
                                 borderRadius: '5px',
+                                top:'25px',
                                 fontFamily: 'Arial, Helvetica, sans-serif',
                                 }}
                                 >Send forgot password mail</Button>

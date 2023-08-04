@@ -66,8 +66,7 @@ const Login = () => {
                             className="signInbtn" 
                             onSubmit={handleSubmit} 
                             type="submit"
-                            style={{ backgroundColor: '#034900',
-                            color:'WhiteSmoke',
+                            style={{
                             padding:'10px 200px',
                             borderRadius: '5px',
                             fontFamily: 'Arial, Helvetica, sans-serif',
@@ -79,8 +78,7 @@ const Login = () => {
                             className="forgotpassbtn" 
                             type="click" 
                             onClick={handleClickResetPass}
-                            style={{ backgroundColor: '#034900',
-                            color:'WhiteSmoke',
+                            style={{ 
                             padding:'10px 30px',
                             borderRadius: '5px',
                             fontFamily: 'Arial, Helvetica, sans-serif',
@@ -91,18 +89,17 @@ const Login = () => {
                         <Button 
                             className="activateaccbtn" 
                             type="click" onClick={handleClickActivateUser}
-                            style={{ backgroundColor: '#034900',
-                            color:'WhiteSmoke',
-                            padding:'9.5px 30px',
+                            style={{ 
+                            padding:'10px 30px',
                             borderRadius: '5px',
                             fontFamily: 'Arial, Helvetica, sans-serif',
                             }}
                             >Activate Account</Button>
                     </div>
-                     <div>
+                     {/* <div>
                         <Button className='setpass' onClick={handleClicksSetPass}>setpass</Button>
                         <Button  className='setnewpass'onClick={handleClickSetNewPass}>setnewpass</Button>
-                    </div>
+                    </div> */}
                 </form>
             </div>
             

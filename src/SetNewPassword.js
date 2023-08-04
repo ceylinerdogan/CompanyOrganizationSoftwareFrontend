@@ -105,8 +105,7 @@ const SetNewPassword = () =>{
                         Length should be between 8 and 32
                     </div>
                     <Button
-                        style={{ backgroundColor: '#034900',
-                        color:'WhiteSmoke',
+                        style={{
                         padding:'10px 60px',
                         borderRadius: '5px',
                         fontFamily: 'Arial, Helvetica, sans-serif',
