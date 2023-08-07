@@ -2,6 +2,7 @@ import { Button, TextField } from '@mui/material';
 import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import "./Login.css"
+import axios from 'axios';
 
 
 const Login = () => {
@@ -9,12 +10,23 @@ const Login = () => {
     const [password,setPassword] = useState('');
     const navigate1 = useNavigate();
     const navigate2 = useNavigate();
-    const navigate3 = useNavigate();
-    const navigate4 = useNavigate();
+    // const navigate3 = useNavigate();
+    // const navigate4 = useNavigate();
     
     const handleSubmit = (e) => {
-    e.preventDefault();
+        e.preventDefault();
+        const loginData={
+            email: email,
+            password: password,
+        }
+        axios.post("https://delta-internship.eu-west-1.elasticbeanstalk.com/api/auth/signin",null,{params:{email,password}}).then(Response=>{
+            console.log(Response.data);
+            alert( "Login succesfull");
+        })
+        .catch(console.error("Error login")); alert("Error login. Please check your email or password.");
     };
+
+    
 
     function handleClickResetPass(event){
         navigate1('/resetpassword');
@@ -24,12 +36,12 @@ const Login = () => {
         navigate2('/activateuser');
     }
 
-    function handleClicksSetPass(event){
-        navigate3('/setpassword');
-    }
+     function handleClicksSetPass(event){
+         navigate3('/setpassword');
+     }
 
     function handleClickSetNewPass(event){
-        navigate4('/setnewpassword');
+         navigate4('/setnewpassword');
     }
 
 
@@ -96,10 +108,10 @@ const Login = () => {
                             }}
                             >Activate Account</Button>
                     </div>
-                     {/* <div>
+                      <div>
                         <Button className='setpass' onClick={handleClicksSetPass}>setpass</Button>
                         <Button  className='setnewpass'onClick={handleClickSetNewPass}>setnewpass</Button>
-                    </div> */}
+                    </div>
                 </form>
             </div>
             

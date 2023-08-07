@@ -1,12 +1,24 @@
 import { Button, TextField } from '@mui/material';
 import React,{useState} from 'react';
 import "./ActivateUser.css"
+import axios from "axios";
 
 const ActivateUser = () =>{
     const [email,setEmail] = useState('');
 
     const handleActivateUser =()=> {
-
+        const activateData={
+            email: email,
+        }
+        
+        axios.post("https://delta-internship.eu-west-1.elasticbeanstalk.com/api/auth/activate-account",null,{params: {email}}).then(Response=>{
+            console.log(Response.data);
+            alert("Activation mail sent succesfully!");
+        })
+        .catch(Error=>{
+            console.error("Error activating user:",Error);
+            alert("Error sending mail. Please try again.");
+        })
     };
 
     return(
