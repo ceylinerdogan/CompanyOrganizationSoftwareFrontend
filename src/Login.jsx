@@ -10,8 +10,8 @@ const Login = () => {
     const [password,setPassword] = useState('');
     const navigate1 = useNavigate();
     const navigate2 = useNavigate();
-    // const navigate3 = useNavigate();
-    // const navigate4 = useNavigate();
+    const navigate3 = useNavigate();
+    const navigate4 = useNavigate();
     
     const handleSubmit = (e) => {
         e.preventDefault();
