@@ -10,8 +10,8 @@ const Login = () => {
     const [password,setPassword] = useState('');
     const navigate1 = useNavigate();
     const navigate2 = useNavigate();
-    //const navigate3 = useNavigate();
-    //const navigate4 = useNavigate();
+    const navigate3 = useNavigate();
+    const navigate4 = useNavigate();
     
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -39,13 +39,13 @@ const Login = () => {
         navigate2('/activateuser');
     }
 
-    //  function handleClicksSetPass(event){
-    //      navigate3('/setpassword');
-    //  }
+      function handleClicksSetPass(event){
+         navigate3('/setpassword');
+     }
 
-    // function handleClickSetNewPass(event){
-    //      navigate4('/setnewpassword');
-    // }
+     function handleClickSetNewPass(event){
+          navigate4('/setnewpassword');
+     }
 
 
     return (
@@ -111,10 +111,10 @@ const Login = () => {
                             }}
                             >Activate Account</Button>
                     </div>
-                      {/* <div>
+                       <div>
                         <Button className='setpass' onClick={handleClicksSetPass}>setpass</Button>
                         <Button  className='setnewpass'onClick={handleClickSetNewPass}>setnewpass</Button>
-                    </div> */}
+                    </div> 
                 </form>
             </div>
             

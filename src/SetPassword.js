@@ -4,15 +4,34 @@ import {basic_eye} from 'react-icons-kit/linea/basic_eye'
 import {basic_eye_closed} from 'react-icons-kit/linea/basic_eye_closed'
 import Icon from 'react-icons-kit';
 import "./SetPassword.css"
-
+import axios from "axios";
+import { useLocation } from 'react-router-dom';
 
 const SetPassword = () =>{
-    const [type,setType] = useState("password");
+    const [password,setPassword] = useState("password");
     const[uppercase,setUpperCase]=useState(false);
     const[lowercase,setLowerCase]=useState(false);
     const[numeric,setNumeric]=useState(false);
     const[specialsymbol,setSpecialSymbol]=useState(false);
     const[length,setLength]=useState(false);
+
+    const location=useLocation();
+    const code= new URLSearchParams(location.search).get('code')
+    const handleSetPassword=()=>{
+        const setpass={
+            password:password,
+            code: code,
+        }
+        console.log(setpass);
+        axios.post("https://delta-internship.eu-west-1.elasticbeanstalk.com/api/auth/confirm-activate-account",null,{params:{code,password}}).then(Response=>{
+            console.log(Response.data);
+            alert("Password set!");
+        })
+        .catch(Error=>{
+            console.error("Error setting password:",Error);
+            alert("Error setting password. Please try again.");
+        })
+    };
     
 
     const handleChange=(value)=>{
@@ -76,17 +95,17 @@ const SetPassword = () =>{
                 <label className='label'>Activate Account </label>
                 <div className='input-box'>
                     <TextField 
-                        type={type}
+                        type={password}
                         id="password"
                         placeholder='********'
                         className="password-input" 
                         onChange={(e)=>handleChange(e.target.value)} />
-                        {type==="password"?(
-                            <span className="icon" onClick={()=>setType("text")}>
+                        {password==="password"?(
+                            <span className="icon" onClick={()=>setPassword("text")}>
                                 <Icon icon={basic_eye_closed} size={25}/>
                             </span>
                         ):(
-                            <span className="icon" onClick={()=>setType("password")}>
+                            <span className="icon" onClick={()=>setPassword("password")}>
                                 <Icon icon={basic_eye} size={25}/>
                             </span>
                         )}
@@ -108,6 +127,7 @@ const SetPassword = () =>{
                         Length should be between 8 and 32
                     </div>
                     <Button 
+                        onClick={handleSetPassword}
                         style={{ 
                         padding:'10px 60px',
                         borderRadius: '5px',
