@@ -12,7 +12,7 @@ const ResetPassword = () =>{
             email: email,
         }
         
-        axios.post("https://delta-internship.eu-west-1.elasticbeanstalk.com//api/auth/reset-password",null,{params: {email}}).then(Response=>{
+        axios.post("https://delta-internship.eu-west-1.elasticbeanstalk.com/api/auth/reset-password",null,{params: {email}}).then(Response=>{
             console.log(Response.data);
             alert("Reset password mail sent succesfully!");
         })
