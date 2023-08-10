@@ -8,35 +8,35 @@
       {
         "src": "/api/auth/signin",
         "headers": {
-          "Access-Control-Allow-Origin": "https://company-organization-software-c5lh950fb-ceylinerdogan.vercel.app"
+          "Access-Control-Allow-Origin": "https://company-organization-software-coral.vercel.app"
         }
       },
       {
         "src": "/api/auth/reset-password",
         "methods": ["GET", "POST"],
         "headers": {
-          "Access-Control-Allow-Origin": "https://company-organization-software-c5lh950fb-ceylinerdogan.vercel.app"
+          "Access-Control-Allow-Origin": "https://company-organization-software-coral.vercel.app"
         }
       },
       {
         "src": "/api/auth/confirm-reset-password",
         "methods": ["GET", "POST"],
         "headers": {
-          "Access-Control-Allow-Origin": "https://company-organization-software-c5lh950fb-ceylinerdogan.vercel.app"
+          "Access-Control-Allow-Origin": "https://company-organization-software-coral.vercel.app"
         }
       },
       {
         "src": "/api/auth/confirm-activate-account",
         "methods": ["GET", "POST"],
         "headers": {
-          "Access-Control-Allow-Origin": "https://company-organization-software-c5lh950fb-ceylinerdogan.vercel.app"
+          "Access-Control-Allow-Origin": "https://company-organization-software-coral.vercel.app"
         }
       },
       {
         "src": "/api/auth/activate-account",
         "methods": ["GET", "POST"],
         "headers": {
-          "Access-Control-Allow-Origin": "https://company-organization-software-c5lh950fb-ceylinerdogan.vercel.app"
+          "Access-Control-Allow-Origin": "https://company-organization-software-coral.vercel.app"
         }
       }
     ]
