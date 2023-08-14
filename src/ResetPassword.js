@@ -8,7 +8,7 @@ const ResetPassword = () =>{
     const [email,setEmail] = useState('');
 
     const handleResetPassword =()=> {
-        const activateData={
+        const resetData={
             email: email,
         }
         
@@ -17,7 +17,7 @@ const ResetPassword = () =>{
             alert("Reset password mail sent succesfully!");
         })
         .catch(Error=>{
-            console.error("Error reset password:",Error);
+            console.error("Error password reset:",Error);
             alert("Error sending mail. Please try again.");
         })
     };
