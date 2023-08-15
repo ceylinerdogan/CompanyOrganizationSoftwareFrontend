@@ -105,11 +105,11 @@ const SetNewPassword = () =>{
                         }}/>
                          {passwordVisible?(
                             <span className="iconSetNew" onClick={()=>setPasswordVisible(false)}>
-                                <Icon icon={basic_eye_closed} size={25}/>
+                                <Icon icon={basic_eye} size={25}/>
                             </span>
                         ):(
                             <span className="iconSetNew" onClick={()=>setPasswordVisible(true)}>
-                                <Icon icon={basic_eye} size={25}/>
+                                <Icon icon={basic_eye_closed} size={25}/>
                             </span>
                         )}  
                 
