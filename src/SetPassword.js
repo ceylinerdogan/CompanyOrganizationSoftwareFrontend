@@ -8,7 +8,8 @@ import axios from "axios";
 import { useLocation } from 'react-router-dom';
 
 const SetPassword = () =>{
-    const [password,setPassword] = useState("password");
+    const [password,setPassword] = useState('');
+    const [passwordVisible, setPasswordVisible] = useState(false);
     const[uppercase,setUpperCase]=useState(false);
     const[lowercase,setLowerCase]=useState(false);
     const[numeric,setNumeric]=useState(false);
@@ -22,7 +23,6 @@ const SetPassword = () =>{
             password:password,
             code: code,
         }
-        console.log(setpass);
         axios.post("https://delta-internship.eu-west-1.elasticbeanstalk.com/api/auth/confirm-activate-account",null,{params:{code,password}}).then(Response=>{
             console.log(Response.data);
             alert("Password set!");
@@ -95,17 +95,21 @@ const SetPassword = () =>{
                 <label className='label'>Activate Account </label>
                 <div className='input-box'>
                     <TextField 
-                        type={password}
+                        type={passwordVisible ?"text": "password"}
                         id="password"
                         placeholder='********'
+                        value={password}
                         className="password-input" 
-                        onChange={(e)=>handleChange(e.target.value)} />
-                        {password==="password"?(
-                            <span className="icon" onClick={()=>setPassword("text")}>
+                        onChange={(e)=>{
+                            handleChange(e.target.value)
+                            setPassword(e.target.value);
+                            }} />
+                        {passwordVisible?(
+                            <span className="icon" onClick={()=>setPasswordVisible(false)}>
                                 <Icon icon={basic_eye_closed} size={25}/>
                             </span>
                         ):(
-                            <span className="icon" onClick={()=>setPassword("password")}>
+                            <span className="icon" onClick={()=>setPasswordVisible(true)}>
                                 <Icon icon={basic_eye} size={25}/>
                             </span>
                         )}

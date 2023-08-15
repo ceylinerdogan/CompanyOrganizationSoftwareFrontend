@@ -8,7 +8,8 @@ import axios from "axios";
 import { useLocation } from 'react-router-dom';
 
 const SetNewPassword = () =>{
-    const [newPassword,setNewPassword] = useState("password");
+    const [newPassword,setNewPassword] = useState('');
+    const [passwordVisible, setPasswordVisible] = useState(false);
     const[uppercase,setUpperCase]=useState(false);
     const[lowercase,setLowerCase]=useState(false);
     const[numeric,setNumeric]=useState(false);
@@ -23,7 +24,6 @@ const SetNewPassword = () =>{
             password:newPassword,
             code: code,
         }
-        console.log(setpass);
         axios.post("https://delta-internship.eu-west-1.elasticbeanstalk.com/api/auth/confirm-reset-password",null,{params:{code,newPassword}}).then(Response=>{
             console.log(Response.data);
             alert("Password set!");
@@ -32,6 +32,7 @@ const SetNewPassword = () =>{
             console.error("Error setting password:",Error);
             alert("Error setting password. Please try again.");
         })
+        
     };
 
     const handleChange=(value)=>{
@@ -93,20 +94,25 @@ const SetNewPassword = () =>{
                 <h2 className='resetPass'>Reset Password </h2>
                 <div className='inputBox'>
                     <TextField 
-                        type={newPassword}
+                        type={passwordVisible ?"text": "password"}
                         id="password"
                         placeholder='********'
                         className="password-input-reset" 
-                        onChange={(e)=>handleChange(e.target.value)}/>
-                        {newPassword==="password"?(
-                            <span className="iconSetNew" onClick={()=>setNewPassword("text")}>
+                        value={newPassword}
+                        onChange={(e)=>{
+                            handleChange(e.target.value);
+                            setNewPassword(e.target.value);
+                        }}/>
+                         {passwordVisible?(
+                            <span className="iconSetNew" onClick={()=>setPasswordVisible(false)}>
                                 <Icon icon={basic_eye_closed} size={25}/>
                             </span>
                         ):(
-                            <span className="iconSetNew" onClick={()=>setNewPassword("password")}>
+                            <span className="iconSetNew" onClick={()=>setPasswordVisible(true)}>
                                 <Icon icon={basic_eye} size={25}/>
                             </span>
-                        )}
+                        )}  
+                
                 </div>
                 <main className="validation-tracker">
                     <div className={uppercase?'validated':'not-validated'}>
