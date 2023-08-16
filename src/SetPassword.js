@@ -24,8 +24,8 @@ const SetPassword = () =>{
     const[length,setLength]=useState(false);
     const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
     const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
-    const navigateL = useNavigate();
-    const navigateE = useNavigate();
+    const navigate1 = useNavigate();
+    const navigate2 = useNavigate();
 
     const location=useLocation();
     const code= new URLSearchParams(location.search).get('code')
@@ -34,7 +34,8 @@ const SetPassword = () =>{
             password:password,
             code: code,
         }
-        axios.post("https://delta-internship.eu-west-1.elasticbeanstalk.com/api/auth/confirm-activate-account",null,{params:{code,password}}).then(Response=>{
+        axios.post("https://delta-internship.eu-west-1.elasticbeanstalk.com/api/auth/confirm-activate-account",null,{params:{code,password}})
+        .then(Response=>{
             console.log(Response.data);
             setSuccessSnackbarOpen(true);
         })
@@ -45,10 +46,10 @@ const SetPassword = () =>{
     };
 
     const handleSnackbarButtonClickSet=()=>{
-        navigateL('/');
+        navigate1('/');
     }
     const handleSnackbarButtonClickError=()=>{
-        navigateE('/activateuser');
+        navigate2('/activateuser');
     }
 
     const handleClose=(event,reason)=>{

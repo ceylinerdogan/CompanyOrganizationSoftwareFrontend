@@ -24,8 +24,8 @@ const SetNewPassword = () =>{
     const[length,setLength]=useState(false);
     const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
     const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
-    const navigateLN = useNavigate();
-    const navigateEN = useNavigate();
+    const navigate1 = useNavigate();
+    const navigate2 = useNavigate();
 
     const location1=useLocation();
     const code= new URLSearchParams(location1.search).get('code')
@@ -48,10 +48,10 @@ const SetNewPassword = () =>{
     };
 
     const handleSnackbarButtonClickSet=()=>{
-        navigateLN('/');
+        navigate1('/');
     }
     const handleSnackbarButtonClickError=()=>{
-        navigateEN('/resetpassword');
+        navigate2('/resetpassword');
     }
     const handleClose=(event,reason)=>{
         if(reason==='clickaway'){
