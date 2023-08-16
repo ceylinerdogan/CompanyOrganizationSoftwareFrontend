@@ -45,7 +45,7 @@ const SetPassword = () =>{
     };
 
     const handleSnackbarButtonClickSet=()=>{
-        navigateL('/login');
+        navigateL('/');
     }
     const handleSnackbarButtonClickError=()=>{
         navigateE('/activateuser');

@@ -47,7 +47,7 @@ const SetNewPassword = () =>{
     };
 
     const handleSnackbarButtonClickSet=()=>{
-        navigateLN('/login');
+        navigateLN('/');
     }
     const handleSnackbarButtonClickError=()=>{
         navigateEN('/resetpassword');
