@@ -28,10 +28,30 @@ const SetPassword = () =>{
     const location=useLocation();
     const code= new URLSearchParams(location.search).get('code')
     const handleSetPassword=()=>{
+        if (password.length === 0) {
+            console.log("Password is empty. Please enter a valid password.");
+            setErrorSnackbarOpen(true);
+            return;
+        }
+
+        const Length = new RegExp('^(?=.{8,32}$)');
+        const upperCase = new RegExp('(?=.*[A-Z])');
+        const lowerCase = new RegExp('(?=.*[a-z])');
+        const specialSymbol = new RegExp('(?=.*[@$.!+-])');
+        const Numeric = new RegExp('(?=.*[0-9])');
+
+        if (!lowerCase.test(password) || !upperCase.test(password) || !Numeric.test(password) || !specialSymbol.test(password) || !Length.test(password)) {
+            console.log("Password does not meet the criteria. Please make sure all criteria are satisfied.");
+            setErrorSnackbarOpen(true);
+            return;
+        }
+
         const setpass={
             password:password,
             code: code,
         }
+        console.log(password);
+        console.log(code);
         axios.post("https://delta-internship.eu-west-1.elasticbeanstalk.com/api/auth/confirm-activate-account",null,{params:{code,password}})
         .then(Response=>{
             console.log(Response.data);
@@ -62,6 +82,14 @@ const SetPassword = () =>{
 
         const Numeric=new RegExp('(?=.*[0-9])');
 
+        if (value.length === 0) {
+            setLowerCase(false);
+            setUpperCase(false);
+            setNumeric(false);
+            setSpecialSymbol(false);
+            setLength(false);
+            return;
+        }
         if(lowerCase.test(value)){
 
             setLowerCase(true);
@@ -172,7 +200,7 @@ const SetPassword = () =>{
                                     onClose={handleClose}
                                     anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
                             <Alert onClose={handleClose} severity="error" sx={{ width: '200%' }}>
-                                Error setting password. Please try again. 
+                            {password.length === 0 ? "Password is empty. Please enter a valid password." : "Password does not meet the criteria. Please make sure all criteria are satisfied."}
                                 <a href="https://company-organization-software-coral.vercel.app/activateuser">Click here to try again.</a>
                             </Alert>
                         </Snackbar>

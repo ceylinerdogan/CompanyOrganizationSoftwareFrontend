@@ -27,6 +27,24 @@ const SetNewPassword = () =>{
     const location1=useLocation();
     const code= new URLSearchParams(location1.search).get('code')
     const handleSetNewPassword=()=>{
+        if (newPassword.length === 0) {
+            console.log("Password is empty. Please enter a valid password.");
+            setErrorSnackbarOpen(true);
+            return;
+        }
+
+        const Length = new RegExp('^(?=.{8,32}$)');
+        const upperCase = new RegExp('(?=.*[A-Z])');
+        const lowerCase = new RegExp('(?=.*[a-z])');
+        const specialSymbol = new RegExp('(?=.*[@$.!+-])');
+        const Numeric = new RegExp('(?=.*[0-9])');
+
+        if (!lowerCase.test(newPassword) || !upperCase.test(newPassword) || !Numeric.test(newPassword) || !specialSymbol.test(newPassword) || !Length.test(newPassword)) {
+            console.log("Password does not meet the criteria. Please make sure all criteria are satisfied.");
+            setErrorSnackbarOpen(true);
+            return;
+        }
+
         const setpass={
             password:newPassword,
             code: code,
@@ -65,6 +83,14 @@ const SetNewPassword = () =>{
 
         const Numeric=new RegExp('(?=.*[0-9])');
 
+        if (value.length === 0) {
+            setLowerCase(false);
+            setUpperCase(false);
+            setNumeric(false);
+            setSpecialSymbol(false);
+            setLength(false);
+            return;
+        }
         if(lowerCase.test(value)){
 
             setLowerCase(true);
@@ -104,6 +130,8 @@ const SetNewPassword = () =>{
         else{
             setLength(false);
         }
+
+
     }
     
 
@@ -116,8 +144,8 @@ const SetNewPassword = () =>{
                         type={passwordVisible ?"text": "password"}
                         id="password"
                         placeholder='********'
-                        className="password-input-reset" 
                         value={newPassword}
+                        className="password-input-reset" 
                         onChange={(e)=>{
                             handleChange(e.target.value);
                             setNewPassword(e.target.value);
@@ -174,7 +202,7 @@ const SetNewPassword = () =>{
                                     onClose={handleClose}
                                     anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
                             <Alert onClose={handleClose} severity="error" sx={{ width: '200%' }}>
-                                Error setting password. Please try again. 
+                                {newPassword.length === 0 ? "Password is empty. Please enter a valid password." : "Password does not meet the criteria. Please make sure all criteria are satisfied."} 
                                  <a href="https://company-organization-software-coral.vercel.app/resetpassword">Click here to try again.</a>
                             </Alert>
                         </Snackbar>
