@@ -34,7 +34,8 @@ const SetNewPassword = () =>{
             password:newPassword,
             code: code,
         }
-        axios.post("https://delta-internship.eu-west-1.elasticbeanstalk.com/api/auth/confirm-reset-password",null,{params:{code,newPassword}}).then(Response=>{
+        axios.post("https://delta-internship.eu-west-1.elasticbeanstalk.com/api/auth/confirm-reset-password",null,{params:{code,newPassword}})
+        .then(Response=>{
             console.log(Response.data);
             setSuccessSnackbarOpen(true);
         })
@@ -186,7 +187,7 @@ const SetNewPassword = () =>{
                                 <Button color='inherit' size='small' onClick={handleSnackbarButtonClickError}>
                                         Click here to try again!
                                 </Button>
-                                {/*<a href="https://company-organization-software-coral.vercel.app/resetpassword">Click here to try again.</a>*/}
+                                {/* <a href="https://company-organization-software-coral.vercel.app/resetpassword">Click here to try again.</a> */}
                             </Alert>
                         </Snackbar>
                 </main>

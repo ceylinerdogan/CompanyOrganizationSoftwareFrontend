@@ -171,7 +171,6 @@ const SetPassword = () =>{
                             <Alert onClose={handleClose} 
                                     severity="success" 
                                     sx={{ width: '200%' }}>
-                                    Password set! 
                                     Password set!                                    
                                     <Button color='inherit' size='small' onClick={handleSnackbarButtonClickSet}>
                                         Click here to go to Login page!
