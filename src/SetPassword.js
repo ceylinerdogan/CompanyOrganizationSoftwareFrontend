@@ -8,7 +8,6 @@ import axios from "axios";
 import { useLocation } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import { useNavigate } from 'react-router-dom';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -24,8 +23,7 @@ const SetPassword = () =>{
     const[length,setLength]=useState(false);
     const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
     const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
-    const navigate1 = useNavigate();
-    const navigate2 = useNavigate();
+    
 
     const location=useLocation();
     const code= new URLSearchParams(location.search).get('code')
@@ -44,13 +42,6 @@ const SetPassword = () =>{
             setErrorSnackbarOpen(true);
         })
     };
-
-    const handleSnackbarButtonClickSet=()=>{
-        navigate1('/');
-    }
-    const handleSnackbarButtonClickError=()=>{
-        navigate2('/activateuser');
-    }
 
     const handleClose=(event,reason)=>{
         if(reason==='clickaway'){
@@ -173,9 +164,7 @@ const SetPassword = () =>{
                                     severity="success" 
                                     sx={{ width: '200%' }}>
                                     Password set!                                    
-                                    <Button color='inherit' size='small' onClick={handleSnackbarButtonClickSet}>
-                                        Click here to go to Login page!
-                                    </Button>
+                                    <a href="https://company-organization-software-coral.vercel.app">Click here to go to Login page.</a>
                             </Alert> 
                         </Snackbar>
                         <Snackbar open={errorSnackbarOpen} 
@@ -184,10 +173,7 @@ const SetPassword = () =>{
                                     anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
                             <Alert onClose={handleClose} severity="error" sx={{ width: '200%' }}>
                                 Error setting password. Please try again. 
-                                <Button color='inherit' size='small' onClick={handleSnackbarButtonClickError}>
-                                        Click here to try again!
-                                </Button>
-                                {/* <a href="https://company-organization-software-coral.vercel.app/activateuser">Click here to try again.</a> */}
+                                <a href="https://company-organization-software-coral.vercel.app/activateuser">Click here to try again.</a>
                             </Alert>
                         </Snackbar>
                 </main>
