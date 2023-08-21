@@ -1,0 +1,53 @@
+{
+    "login": {
+        "title": "Giriş Yap",
+        "emailLabel": "E-posta Adresi",
+        "passwordLabel": "Şifre",
+        "loginButton": "Giriş Yap",
+        "forgotPasswordButton": "Şifremi Unuttum?",
+        "activateAccountButton": "Hesabı Aktive Et",
+        "emailError": "Lütfen geçerli bir e-posta adresi girin",
+        "loginSuccessMessage": "Giriş Başarılı!",
+        "loginErrorMessage": "Giriş yapılırken hata oluştu. Lütfen e-posta adresinizi veya şifrenizi kontrol edin!"
+    },
+    "activate":{
+      "title": "Kullanıcı Aktifleştirme",
+      "emailLabel": "E-posta Adresi",
+      "sendActivationMailButton": "Aktivasyon Maili Gönder",
+      "mailSendSuccessfulMessage": "Aktivasyon maili başarıyla gönderildi!",
+      "mailSendErrorMessage": "Mail gönderilirken hata oluştu. Lütfen tekrar deneyin!"
+    },
+    "forgotPassword":{
+      "title": "Şifre Sıfırlama",
+      "emailLabel": "E-posta Adresi",
+      "sendActivationMailButton": "Şifre Sıfırlama Maili Gönder",
+      "mailSendSuccessfulMessage": "Şifre Sıfırlama Maili Başarıyla Gönderildi",
+      "mailSendErrorMessage": "Mail gönderilirken hata oluştu. Lütfen tekrar deneyin!"
+    },
+      "activatePass": {
+        "title": "Kullanıcı Aktifleştirme",
+        "activateUserButton": "Kullanıcıyı Aktifleştir",
+        "successfulMessage": "Şifre Ayarlandı! ",
+        "length": "Şifre uzunluğu 8 ila 32 karakter arasında olmalı",
+        "uppercase": "En az 1 BÜYÜK HARF içermeli",
+        "lowercase": "En az 1 küçük harf içermeli",
+        "numeric" : "En az 1 sayı içermeli",
+        "symbol" : "En az 1 özel karakter içermeli: @$.!-+"
+    },
+      "resetPass": {
+        "title": "Şifre Sıfırlama",
+        "resetPassButton": "Şifreyi sıfırla",
+        "successfulMessage": "Şifre Ayarlandı! ",
+        "length": "Şifre uzunluğu 8 ila 32 karakter arasında olmalı",
+        "uppercase": "En az 1 BÜYÜK HARF içermeli",
+        "lowercase": "En az 1 küçük harf içermeli",
+        "numeric" : "En az 1 sayı içermeli",
+        "symbol" : "En az 1 özel karakter içermeli: @$.!-+"
+    },
+      "snackbarErrors": {
+         "emptyPassword": "Şifre boş. Lütfen geçerli bir şifre girin.",
+         "criteriaNotMet": "Şifre kriterlerini sağlamıyor. Lütfen tüm kriterlerin karşılandığından emin olun.",
+        "tryAgainLink1": " <a href='https://company-organization-software-coral.vercel.app/activateuser'>Tekrar mail göndermek için buraya tıklayın</a>.",
+        "tryAgainLink2": " <a href='https://company-organization-software-coral.vercel.app/resetpassword'>Tekrar mail göndermek için buraya tıklayın</a>."
+      }
+}    

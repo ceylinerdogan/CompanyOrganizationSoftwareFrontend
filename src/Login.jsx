@@ -5,6 +5,8 @@ import "./Login.css"
 import axios from 'axios';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { useTranslation } from 'react-i18next';
+import i18n from './i18n';
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -13,14 +15,21 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 
 const Login = () => {
+    const {t} = useTranslation();
     const [email,setEmail] = useState('');
     const [password,setPassword] = useState('');
     const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
     const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
+    const [emailError,setEmailError] = useState(false);
     const navigate1 = useNavigate();
     const navigate2 = useNavigate();
-    // const navigate3 = useNavigate();
-    // const navigate4 = useNavigate();
+    const navigate3 = useNavigate();
+    const navigate4 = useNavigate();
+
+    const emailCheck=(email)=>{
+        const emailPattern =/^[a-z0-9]+@[a-z]+\.[a-z]{2,5}/;
+        return emailPattern.test(email);
+    }
 
     Notification.requestPermission((result) => {
         //console.log(result);
@@ -29,14 +38,25 @@ const Login = () => {
     
     const handleSubmit = (e) => {
         e.preventDefault();
+        if(!emailCheck(email)){
+            console.log("Email is not valid. Please enter a valid email.");
+            setEmailError(true);
+            return;
+        }
+        if (password.length === 0) {
+            console.log("Password is empty. Please enter a valid password.");
+            setErrorSnackbarOpen(true);
+            return;
+        }
+
         const loginData={
             email: email,
             password: password,
         };
         axios.post("https://delta-internship.eu-west-1.elasticbeanstalk.com/api/auth/signin",null,{params:{email,password}})
             .then((Response)=>{
-            console.log(Response.data);
-            setSuccessSnackbarOpen(true);
+                console.log(Response.data);
+                setSuccessSnackbarOpen(true);
             })
             .catch((Error)=>{
                 console.error("Error login:",Error);
@@ -50,6 +70,7 @@ const Login = () => {
         }
         setSuccessSnackbarOpen(false);
         setErrorSnackbarOpen(false);
+        setEmailError(false);
     };
 
     function handleClickResetPass(event){
@@ -60,33 +81,34 @@ const Login = () => {
         navigate2('/activateuser');
     }
 
-    // function handleClicksSetPass(event){
-    //      navigate3('/setpassword');
-    //  }
+    function handleClicksSetPass(event){
+         navigate3('/setpassword');
+    }
 
-    // function handleClickSetNewPass(event){
-    //       navigate4('/setnewpassword');
-    //  }
+    function handleClickSetNewPass(event){
+          navigate4('/setnewpassword');
+    }
 
 
     return (
         <div className='container'>
             <div className='box-login'>
                 <form onSubmit={handleSubmit}>
-                    <h2 className='login'>Login</h2>
+                    <h2 className='login'>{t('login.title')}</h2>
                     <div>
-                        <label className="labelEmail" htmlFor="email">Email Address</label>
+                        <label className="labelEmail" htmlFor="email">{t('login.emailLabel')}</label>
                         <TextField 
                             type="text"
                             id="email"
                             value={email}
                             onChange={(e)=> setEmail(e.target.value)}
-                            placeholder="Email"
+                            placeholder={t('login.emailLabel')}
                             className='emailinput'
+                            error={emailError}
                         />
                     </div>
                     <div>
-                        <label className="labelPass" htmlFor="password">Password</label>
+                        <label className="labelPass" htmlFor="password">{t('login.passwordLabel')}</label>
                         <TextField
                             type="password"
                             id="password"
@@ -107,13 +129,13 @@ const Login = () => {
                         borderRadius: '5px',
                         fontFamily: 'Arial, Helvetica, sans-serif',
                         }}
-                        >Login</Button>
+                        >{t('login.loginButton')}</Button>
                         <Snackbar open={successSnackbarOpen} 
                                     autoHideDuration={3000} 
                                     onClose={handleClose}
                                     anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
                             <Alert onClose={handleClose} severity="success" sx={{ width: '200%' }}>
-                                Login Successful!
+                            {t('login.loginSuccessMessage')}
                             </Alert>
                         </Snackbar>
                         <Snackbar open={errorSnackbarOpen} 
@@ -121,8 +143,18 @@ const Login = () => {
                                     onClose={handleClose}
                                     anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
                             <Alert onClose={handleClose} severity="error" sx={{ width: '200%' }}>
-                                Error logging in. Please check your email or password!
+                            {t('login.loginErrorMessage')}
                             </Alert>
+                        </Snackbar>
+                        <Snackbar open={emailError} 
+                                    autoHideDuration={3000} 
+                                    onClose={handleClose}
+                                    anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
+                            <Alert onClose={handleClose} 
+                                    severity="error" 
+                                    sx={{ width: '200%' }}>
+                                    {t('login.emailError')}
+                            </Alert> 
                         </Snackbar>
                     </div>
                     <div>
@@ -135,7 +167,7 @@ const Login = () => {
                             borderRadius: '5px',
                             fontFamily: 'Arial, Helvetica, sans-serif',
                             }}
-                            >Forgot Password?</Button>
+                            >{t('login.forgotPasswordButton')}</Button>
                     </div>
                     <div>
                         <Button 
@@ -146,12 +178,12 @@ const Login = () => {
                             borderRadius: '5px',
                             fontFamily: 'Arial, Helvetica, sans-serif',
                             }}
-                            >Activate Account</Button>
+                            >{t('login.activateAccountButton')}</Button>
                     </div>
-                       {/* <div>
+                        <div>
                         <Button className='setpass' onClick={handleClicksSetPass}>setpass</Button>
                         <Button  className='setnewpass'onClick={handleClickSetNewPass}>setnewpass</Button>
-                    </div>  */}
+                    </div>  
                 </form>
             </div>
         </div>

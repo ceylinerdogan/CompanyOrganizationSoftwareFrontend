@@ -4,17 +4,32 @@ import "./ResetPassword.css"
 import axios from "axios";
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { useTranslation } from 'react-i18next';
+import i18n from './i18n';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
 
 const ResetPassword = () =>{
+    const {t} = useTranslation();
     const [email,setEmail] = useState('');
     const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
     const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
+    const [emailError,setEmailError] = useState(false);
+
+    const emailCheck=(email)=>{
+        const emailPattern =/^[a-z0-9]+@[a-z]+\.[a-z]{2,5}/;
+        return emailPattern.test(email);
+    }
 
     const handleResetPassword =()=> {
+        if(!emailCheck(email)){
+            console.log("Email is not valid. Please enter a valid email.");
+            setEmailError(true);
+            return;
+        }
+
         const resetData={
             email: email,
         }
@@ -35,22 +50,23 @@ const ResetPassword = () =>{
         }
         setSuccessSnackbarOpen(false);
         setErrorSnackbarOpen(false);
+        setEmailError(false);
     };
 
     return(
         <div className='wrapperReset'>
             <div className='box-reset'>
                 <form>
-                    <h2 className='reset-pass'>Forgot Password </h2>
+                    <h2 className='reset-pass'>{t('forgotPassword.title')} </h2>
                     <div>
                         <div>
-                        <label className="labelEmailReset" htmlFor="email"> Email Adress</label>
-                            <TextField 
+                            <label className="labelEmailReset" htmlFor="email"> {t('forgotPassword.emailLabel')}</label>
+                                <TextField 
                                 type ="text" 
                                 id="email"
                                 value={email} 
                                 onChange= {(e)=>setEmail(e.target.value)} 
-                                placeholder ="Email" 
+                                placeholder ={t('forgotPassword.emailLabel')} 
                                 className='emailInput'/>
                         </div>
                             <Button 
@@ -62,13 +78,14 @@ const ResetPassword = () =>{
                                 top:'25px',
                                 fontFamily: 'Arial, Helvetica, sans-serif',
                                 }}
-                                >Send forgot password mail</Button>
+                                >{t('forgotPassword.sendActivationMailButton')}</Button>
                                 <Snackbar open={successSnackbarOpen} 
                                     autoHideDuration={3000} 
                                     onClose={handleClose}
                                     anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
                             <Alert onClose={handleClose} severity="success" sx={{ width: '200%' }}>
-                                Reset password mail sent succesfully!
+                            {t('forgotPassword.mailSendSuccessfulMessage')}
+                                <a href="https://company-organization-software-coral.vercel.app">Click here to go to Login page.</a>
                             </Alert>
                         </Snackbar>
                         <Snackbar open={errorSnackbarOpen} 
@@ -76,8 +93,18 @@ const ResetPassword = () =>{
                                     onClose={handleClose}
                                     anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
                             <Alert onClose={handleClose} severity="error" sx={{ width: '200%' }}>
-                                Error sending mail. Please try again.
+                            {t('forgotPassword.mailSendErrorMessage')}
                             </Alert>
+                        </Snackbar>
+                        <Snackbar open={emailError} 
+                                    autoHideDuration={3000} 
+                                    onClose={handleClose}
+                                    anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
+                            <Alert onClose={handleClose} 
+                                    severity="error" 
+                                    sx={{ width: '200%' }}>
+                                    {t('forgotPassword.emailError')}
+                            </Alert> 
                         </Snackbar>
                     </div>
                 </form>

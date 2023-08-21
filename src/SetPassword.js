@@ -8,12 +8,15 @@ import axios from "axios";
 import { useLocation } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { useTranslation } from 'react-i18next';
+import i18n from './i18n';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
 
 const SetPassword = () =>{
+    const {t} = useTranslation();
     const [password,setPassword] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(false);
     const[uppercase,setUpperCase]=useState(false);
@@ -137,7 +140,7 @@ const SetPassword = () =>{
     return(
         <div className="outer-box">
             <div className='box'>
-                <label className='label'>Activate Account </label>
+                <label className='label'>{t('activatePass.title')} </label>
                 <div className='input-box'>
                     <TextField 
                         type={passwordVisible ?"text": "password"}
@@ -161,19 +164,19 @@ const SetPassword = () =>{
                 </div>
                 <main className="validation-tracker">
                     <div className={uppercase?'validated':'not-validated'}>
-                        At least one uppercase character
+                    {t('activatePass.uppercase')}
                     </div>
                     <div className={lowercase?'validated':'not-validated'}>
-                        At least one lowercase character
+                    {t('activatePass.lowercase')}
                     </div>
                     <div className={numeric?'validated':'not-validated'}>
-                        At least one numeric character
+                    {t('activatePass.numeric')}
                     </div>
                     <div className={specialsymbol?'validated':'not-validated'}>
-                        At least one special symbol among @$.!-+
+                    {t('activatePass.symbol')}
                     </div>
                     <div className={length?'validated':'not-validated'}>
-                        Length should be between 8 and 32
+                    {t('activatePass.length')}
                     </div>
                     <Button 
                         onClick={handleSetPassword}
@@ -183,7 +186,7 @@ const SetPassword = () =>{
                         fontFamily: 'Arial, Helvetica, sans-serif',
                         fontSize:'16px'}}
                         className="activate-btn" 
-                        >Activate Account</Button>
+                        >{t('activatePass.activateUserButton')}</Button>
                         <Snackbar open={successSnackbarOpen} 
                                     autoHideDuration={3000} 
                                     onClose={handleClose}
@@ -191,7 +194,7 @@ const SetPassword = () =>{
                             <Alert onClose={handleClose} 
                                     severity="success" 
                                     sx={{ width: '200%' }}>
-                                    Password set!                                    
+                                    {t('activatePass.successfulMessage')}                                  
                                     <a href="https://company-organization-software-coral.vercel.app">Click here to go to Login page.</a>
                             </Alert> 
                         </Snackbar>
@@ -200,8 +203,8 @@ const SetPassword = () =>{
                                     onClose={handleClose}
                                     anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
                             <Alert onClose={handleClose} severity="error" sx={{ width: '200%' }}>
-                            {password.length === 0 ? "Password is empty. Please enter a valid password." : "Password does not meet the criteria. Please make sure all criteria are satisfied."}
-                                <a href="https://company-organization-software-coral.vercel.app/activateuser">Click here to try again.</a>
+                            {password.length === 0 ? t('snackbarErrors.emptyPassword') : t('snackbarErrors.criteriaNotMet')}
+                            <span dangerouslySetInnerHTML={{ __html: t('snackbarErrors.tryAgainLink1') }} />
                             </Alert>
                         </Snackbar>
                 </main>

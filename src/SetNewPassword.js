@@ -8,12 +8,15 @@ import axios from "axios";
 import { useLocation } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { useTranslation } from 'react-i18next';
+import i18n from './i18n';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
 
 const SetNewPassword = () =>{
+    const {t} = useTranslation();
     const [newPassword,setNewPassword] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(false);
     const[uppercase,setUpperCase]=useState(false);
@@ -138,7 +141,7 @@ const SetNewPassword = () =>{
     return(
         <div className='outerBox'>
             <div className='box-newPass'>
-                <h2 className='resetPass'>Reset Password </h2>
+                <h2 className='resetPass'>{t('resetPass.title')} </h2>
                 <div className='inputBox'>
                     <TextField 
                         type={passwordVisible ?"text": "password"}
@@ -163,19 +166,19 @@ const SetNewPassword = () =>{
                 </div>
                 <main className="validation-tracker">
                     <div className={uppercase?'validated':'not-validated'}>
-                        At least one uppercase character
+                    {t('resetPass.uppercase')}
                     </div>
                     <div className={lowercase?'validated':'not-validated'}>
-                        At least one lowercase character
+                    {t('resetPass.lowercase')}
                     </div>
                     <div className={numeric?'validated':'not-validated'}>
-                        At least one numeric character
+                    {t('resetPass.numeric')}
                     </div>
                     <div className={specialsymbol?'validated':'not-validated'}>
-                        At least one special symbol among @$.!-+
+                    {t('resetPass.symbol')}
                     </div>
                     <div className={length?'validated':'not-validated'}>
-                        Length should be between 8 and 32
+                    {t('resetPass.length')}
                     </div>
                     <Button
                         onClick={handleSetNewPassword}
@@ -185,7 +188,7 @@ const SetNewPassword = () =>{
                         fontFamily: 'Arial, Helvetica, sans-serif',
                         fontSize:'16px'}} 
                         className="reset-pass-btn"
-                        >Reset Password</Button>
+                        >{t('resetPass.resetPassButton')}</Button>
                         <Snackbar open={successSnackbarOpen} 
                                     autoHideDuration={3000} 
                                     onClose={handleClose}
@@ -193,7 +196,7 @@ const SetNewPassword = () =>{
                             <Alert onClose={handleClose} 
                                     severity="success" 
                                     sx={{ width: '200%' }}>
-                                    Password set!                                    
+                                    {t('resetPass.successfulMessage')}                                  
                                     <a href="https://company-organization-software-coral.vercel.app">Click here to go to Login page.</a>
                             </Alert>
                         </Snackbar>
@@ -202,8 +205,8 @@ const SetNewPassword = () =>{
                                     onClose={handleClose}
                                     anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
                             <Alert onClose={handleClose} severity="error" sx={{ width: '200%' }}>
-                                {newPassword.length === 0 ? "Password is empty. Please enter a valid password." : "Password does not meet the criteria. Please make sure all criteria are satisfied."} 
-                                 <a href="https://company-organization-software-coral.vercel.app/resetpassword">Click here to try again.</a>
+                                {newPassword.length === 0 ? t('snackbarErrors.emptyPassword') : t('snackbarErrors.criteriaNotMet')} 
+                                <span dangerouslySetInnerHTML={{ __html: t('snackbarErrors.tryAgainLink2') }} />
                             </Alert>
                         </Snackbar>
                 </main>
