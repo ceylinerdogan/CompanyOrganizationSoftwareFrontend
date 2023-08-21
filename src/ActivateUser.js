@@ -40,7 +40,7 @@ const ActivateUser = () =>{
         axios.post("https://delta-internship.eu-west-1.elasticbeanstalk.com/api/auth/activate-account",null,{params: {email}})
         .then(Response=>{
             console.log(Response.data);
-            if(Response.data.success){
+            if(Response.data.message ==='successful'){
                 setSuccessSnackbarOpen(true);
             }else{
                 setErrorSnackbarOpen(true);
