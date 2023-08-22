@@ -15,14 +15,19 @@
       "emailLabel": "E-posta Adresi",
       "sendActivationMailButton": "Aktivasyon Maili Gönder",
       "mailSendSuccessfulMessage": "Aktivasyon maili başarıyla gönderildi!",
-      "mailSendErrorMessage": "Mail gönderilirken hata oluştu. Lütfen tekrar deneyin!"
+      "mailSendErrorMessage": "Mail gönderilirken hata oluştu. Lütfen tekrar deneyin!",
+      "emailError": "Lütfen geçerli bir e-posta adresi girin.",
+      "emailUsedBeforeError": "Hesap daha önce aktifleştirildi! "
+
     },
     "forgotPassword":{
       "title": "Şifre Sıfırlama",
       "emailLabel": "E-posta Adresi",
       "sendActivationMailButton": "Şifre Sıfırlama Maili Gönder",
       "mailSendSuccessfulMessage": "Şifre Sıfırlama Maili Başarıyla Gönderildi",
-      "mailSendErrorMessage": "Mail gönderilirken hata oluştu. Lütfen tekrar deneyin!"
+      "mailSendErrorMessage": "Mail gönderilirken hata oluştu. Lütfen tekrar deneyin!",
+      "emailError": "Lütfen geçerli bir e-posta adresi girin.",
+      "userNotFoundError": "Kullanıcı bulunamadı! Lütfen geçerli bir kullanıcı e-posta adresi girin."
     },
       "activatePass": {
         "title": "Kullanıcı Aktifleştirme",

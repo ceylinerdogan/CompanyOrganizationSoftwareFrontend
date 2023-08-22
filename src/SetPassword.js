@@ -29,7 +29,7 @@ const SetPassword = () =>{
     
 
     const location=useLocation();
-    const code= new URLSearchParams(location.search).get('code')
+    const token= new URLSearchParams(location.search).get('token')
     const handleSetPassword=()=>{
         if (password.length === 0) {
             console.log("Password is empty. Please enter a valid password.");
@@ -51,11 +51,11 @@ const SetPassword = () =>{
 
         const setpass={
             password:password,
-            code: code,
+            token: token,
         }
         console.log(password);
-        console.log(code);
-        axios.post("https://delta-internship.eu-west-1.elasticbeanstalk.com/api/auth/confirm-activate-account",null,{params:{code,password}})
+        console.log(token);
+        axios.post("",setpass)
         .then(Response=>{
             console.log(Response.data);
             setSuccessSnackbarOpen(true);

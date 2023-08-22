@@ -1,3 +1,4 @@
+import { Button } from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -10,8 +11,8 @@ function LanguageSwitcher() {
 
   return (
     <div>
-      <button onClick={() => changeLanguage('en')}>English</button>
-      <button onClick={() => changeLanguage('tr')}>Türkçe</button>
+      <Button onClick={() => changeLanguage('en')}>English</Button>
+      <Button onClick={() => changeLanguage('tr')}>Türkçe</Button>
     </div>
   );
 }

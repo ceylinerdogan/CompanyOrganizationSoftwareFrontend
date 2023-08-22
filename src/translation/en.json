@@ -16,7 +16,8 @@
       "sendActivationMailButton": "Send Activation Mail",
       "mailSendSuccessfulMessage": "Activation mail sent succesfully!",
       "mailSendErrorMessage": "Error sending mail. Please try again.",
-      "emailError": "Please enter a valid email address"
+      "emailError": "Please enter a valid email address.",
+      "emailUsedBeforeError": "Account has already been activated! "
     },
     "forgotPassword":{
       "title": "Forgot Password",
@@ -24,7 +25,8 @@
       "sendActivationMailButton": "Send forgot password mail",
       "mailSendSuccessfulMessage": "Reset password mail sent succesfully!",
       "mailSendErrorMessage": "Error sending mail. Please try again.",
-      "emailError": "Please enter a valid email address"
+      "emailError": "Please enter a valid email address",
+      "userNotFoundError": "User not found! Please enter valid user email."
     },
     "activatePass": {
       "title": "Activate User",

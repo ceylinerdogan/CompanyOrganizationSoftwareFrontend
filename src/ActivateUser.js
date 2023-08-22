@@ -20,9 +20,10 @@ const ActivateUser = () =>{
     const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
     const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
     const [emailError,setEmailError] = useState(false);
+    const [emailUsedBeforeError,setEmailUsedBeforeError] =useState(false);
 
     const emailCheck=(email)=>{
-        const emailPattern =/^[a-z0-9]+@[a-z]+\.[a-z]{2,5}/;
+        const emailPattern =/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return emailPattern.test(email);
     }
 
@@ -34,20 +35,21 @@ const ActivateUser = () =>{
         }
         
         const activateData={
-            email: email,
+            email: email
         }
         
-        axios.post("https://delta-internship.eu-west-1.elasticbeanstalk.com/api/auth/activate-account",null,{params: {email}})
-        .then(Response=>{
-            console.log(Response.data);
-            if(Response.data.message ==='successful'){
+        axios.post("https://delta.eu-west-1.elasticbeanstalk.com/auth/activateAccount",activateData)
+        .then(response=>{
+            console.log(response.data);
+            if(response.data.message ==='Activation mail send'){
                 setSuccessSnackbarOpen(true);
-            }else{
-                setErrorSnackbarOpen(true);
             }
         })
         .catch(Error=>{
             console.error("Error activating user:",Error);
+            if(Error.response.data.message === 'User already activated'){
+                setEmailUsedBeforeError(true);
+            }
             setErrorSnackbarOpen(true);
         })
     };
@@ -59,6 +61,7 @@ const ActivateUser = () =>{
         setSuccessSnackbarOpen(false);
         setErrorSnackbarOpen(false);
         setEmailError(false);
+        setEmailUsedBeforeError(false);
     };
 
     return(
@@ -110,6 +113,16 @@ const ActivateUser = () =>{
                                     severity="error" 
                                     sx={{ width: '200%' }}>
                                     {t('activate.emailError')}
+                            </Alert> 
+                        </Snackbar>
+                        <Snackbar open={emailUsedBeforeError} 
+                                    autoHideDuration={3000} 
+                                    onClose={handleClose}
+                                    anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
+                            <Alert onClose={handleClose} 
+                                    severity="error" 
+                                    sx={{ width: '200%' }}>
+                                    {t('activate.emailUsedBeforeError')}
                             </Alert> 
                         </Snackbar>
                 </form>

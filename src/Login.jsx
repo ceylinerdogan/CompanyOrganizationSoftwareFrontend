@@ -27,7 +27,7 @@ const Login = () => {
     const navigate4 = useNavigate();
 
     const emailCheck=(email)=>{
-        const emailPattern =/^[a-z0-9]+@[a-z]+\.[a-z]{2,5}/;
+        const emailPattern =/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return emailPattern.test(email);
     }
 
@@ -53,7 +53,7 @@ const Login = () => {
             email: email,
             password: password,
         };
-        axios.post("https://delta-internship.eu-west-1.elasticbeanstalk.com/api/auth/signin",null,{params:{email,password}})
+        axios.post("https://delta.eu-west-1.elasticbeanstalk.com/auth/login",loginData)
             .then((Response)=>{
                 console.log(Response.data);
                 setSuccessSnackbarOpen(true);

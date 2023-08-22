@@ -17,7 +17,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 const SetNewPassword = () =>{
     const {t} = useTranslation();
-    const [newPassword,setNewPassword] = useState('');
+    const [password,setPassword] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(false);
     const[uppercase,setUpperCase]=useState(false);
     const[lowercase,setLowerCase]=useState(false);
@@ -28,9 +28,9 @@ const SetNewPassword = () =>{
     const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
 
     const location1=useLocation();
-    const code= new URLSearchParams(location1.search).get('code')
+    const token= new URLSearchParams(location1.search).get('token')
     const handleSetNewPassword=()=>{
-        if (newPassword.length === 0) {
+        if (password.length === 0) {
             console.log("Password is empty. Please enter a valid password.");
             setErrorSnackbarOpen(true);
             return;
@@ -42,19 +42,19 @@ const SetNewPassword = () =>{
         const specialSymbol = new RegExp('(?=.*[@$.!+-])');
         const Numeric = new RegExp('(?=.*[0-9])');
 
-        if (!lowerCase.test(newPassword) || !upperCase.test(newPassword) || !Numeric.test(newPassword) || !specialSymbol.test(newPassword) || !Length.test(newPassword)) {
+        if (!lowerCase.test(password) || !upperCase.test(password) || !Numeric.test(password) || !specialSymbol.test(password) || !Length.test(password)) {
             console.log("Password does not meet the criteria. Please make sure all criteria are satisfied.");
             setErrorSnackbarOpen(true);
             return;
         }
 
         const setpass={
-            password:newPassword,
-            code: code,
+            password: password,
+            token: token,
         }
-        console.log(newPassword);
-        console.log(code);
-        axios.post("https://delta-internship.eu-west-1.elasticbeanstalk.com/api/auth/confirm-reset-password",null,{params:{code,newPassword}})
+        console.log(password);
+        console.log(token);
+        axios.post("https://delta.eu-west-1.elasticbeanstalk.com/auth/setNewPassword",setpass)
         .then(Response=>{
             console.log(Response.data);
             setSuccessSnackbarOpen(true);
@@ -147,11 +147,11 @@ const SetNewPassword = () =>{
                         type={passwordVisible ?"text": "password"}
                         id="password"
                         placeholder='********'
-                        value={newPassword}
+                        value={password}
                         className="password-input-reset" 
                         onChange={(e)=>{
                             handleChange(e.target.value);
-                            setNewPassword(e.target.value);
+                            setPassword(e.target.value);
                         }}/>
                          {passwordVisible?(
                             <span className="iconSetNew" onClick={()=>setPasswordVisible(false)}>
@@ -205,7 +205,7 @@ const SetNewPassword = () =>{
                                     onClose={handleClose}
                                     anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
                             <Alert onClose={handleClose} severity="error" sx={{ width: '200%' }}>
-                                {newPassword.length === 0 ? t('snackbarErrors.emptyPassword') : t('snackbarErrors.criteriaNotMet')} 
+                                {password.length === 0 ? t('snackbarErrors.emptyPassword') : t('snackbarErrors.criteriaNotMet')} 
                                 <span dangerouslySetInnerHTML={{ __html: t('snackbarErrors.tryAgainLink2') }} />
                             </Alert>
                         </Snackbar>

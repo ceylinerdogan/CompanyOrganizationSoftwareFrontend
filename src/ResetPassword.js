@@ -17,6 +17,7 @@ const ResetPassword = () =>{
     const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
     const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
     const [emailError,setEmailError] = useState(false);
+    const [userNotFoundError,setUserNotFoundError] =useState(false);
 
     const emailCheck=(email)=>{
         const emailPattern =/^[a-z0-9]+@[a-z]+\.[a-z]{2,5}/;
@@ -34,12 +35,18 @@ const ResetPassword = () =>{
             email: email,
         }
         
-        axios.post("https://delta-internship.eu-west-1.elasticbeanstalk.com/api/auth/reset-password",null,{params: {email}}).then(Response=>{
+        axios.post("https://delta.eu-west-1.elasticbeanstalk.com/auth/forgotPassword",resetData)
+        .then(Response=>{
             console.log(Response.data);
-            setSuccessSnackbarOpen(true);
+            if(Response.data.message ==='Reset password mail send'){
+                setSuccessSnackbarOpen(true);
+            }
         })
         .catch(Error=>{
             console.error("Error password reset:",Error);
+            if(Error.response.data.message === 'User not found'){
+                setUserNotFoundError(true);
+            }
             setErrorSnackbarOpen(true);
         })
     };
@@ -51,6 +58,7 @@ const ResetPassword = () =>{
         setSuccessSnackbarOpen(false);
         setErrorSnackbarOpen(false);
         setEmailError(false);
+        setUserNotFoundError(false);
     };
 
     return(
@@ -104,6 +112,16 @@ const ResetPassword = () =>{
                                     severity="error" 
                                     sx={{ width: '200%' }}>
                                     {t('forgotPassword.emailError')}
+                            </Alert> 
+                        </Snackbar>
+                        <Snackbar open={userNotFoundError} 
+                                    autoHideDuration={3000} 
+                                    onClose={handleClose}
+                                    anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
+                            <Alert onClose={handleClose} 
+                                    severity="error" 
+                                    sx={{ width: '200%' }}>
+                                    {t('forgotPassword.userNotFoundError')}
                             </Alert> 
                         </Snackbar>
                     </div>
