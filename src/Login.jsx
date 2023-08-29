@@ -1,4 +1,4 @@
-import { Button, Stack, TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import "./Login.css"
@@ -23,8 +23,9 @@ const Login = () => {
     const [emailError,setEmailError] = useState(false);
     const navigate1 = useNavigate();
     const navigate2 = useNavigate();
-    const navigate3 = useNavigate();
-    const navigate4 = useNavigate();
+    // const navigate3 = useNavigate();
+    // const navigate4 = useNavigate();
+    const navigate5 = useNavigate();
 
     const emailCheck=(email)=>{
         const emailPattern =/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -57,6 +58,9 @@ const Login = () => {
             .then((Response)=>{
                 console.log(Response.data);
                 setSuccessSnackbarOpen(true);
+                navigate5('/usertable');
+
+                localStorage.setItem('token',Response.data.data.accessToken);
             })
             .catch((Error)=>{
                 console.error("Error login:",Error);
@@ -81,13 +85,14 @@ const Login = () => {
         navigate2('/activateuser');
     }
 
-    function handleClicksSetPass(event){
-         navigate3('/setpassword');
-    }
+    // function handleClicksSetPass(event){
+    //      navigate3('/setpassword');
+    // }
 
-    function handleClickSetNewPass(event){
-          navigate4('/setnewpassword');
-    }
+    // function handleClickSetNewPass(event){
+    //       navigate4('/setnewpassword');
+    // }
+
 
 
     return (
@@ -180,10 +185,10 @@ const Login = () => {
                             }}
                             >{t('login.activateAccountButton')}</Button>
                     </div>
-                        <div>
+                        {/* <div>
                         <Button className='setpass' onClick={handleClicksSetPass}>setpass</Button>
                         <Button  className='setnewpass'onClick={handleClickSetNewPass}>setnewpass</Button>
-                    </div>  
+                    </div>   */}
                 </form>
             </div>
         </div>
