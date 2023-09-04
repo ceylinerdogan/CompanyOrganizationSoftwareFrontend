@@ -8,9 +8,13 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import AddIcon from '@mui/icons-material/Add';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
-
-
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const columns = [
   { field: 'id', headerName: 'ID', width: 90 },
@@ -31,7 +35,35 @@ export default function UserTable() {
     const [filteredRows,setFilteredRows] = useState([]);
     const [companyFilter, setCompanyFilter] = useState('');
     const [departmentFilter, setDepartmentFilter] = useState('');
+    const [role,setRole] = useState('');
     const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [isAddOpen,setIsAddOpen] = useState(false);
+    const [name,setName] = useState('');
+    const [surname,setSurname] = useState('');
+    const [email,setEmail] = useState('');
+    const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
+    const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
+    const [emailError,setEmailError] = useState(false);
+    //Bu errorlar çeviri dosyasında ona göre yazılacak ayrıca 
+    //obje tanımlamaya gerek yok toggle yapılacak setNewPassword gibi
+    //const [nameSurnameEmailError, setNameSurnameEmailError] = useState(false);
+    //const [roleCompanyDepartmentError, setRoleCompanyDepartmentError] = useState(false);
+    const token=localStorage.getItem('token');
+    const roleMapping={
+      "Admin":1,
+      "Manager":2
+    }
+    const departmentMapping={
+      "Genel Müdürlük": 1,
+      "Yazılım Geliştirme":2
+    }
+    const selectedRoleId = roleMapping[role];
+    const selectedDepartmentId = departmentMapping[departmentFilter];
+
+    const emailCheck=(email)=>{
+      const emailPattern =/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      return emailPattern.test(email);
+  }
 
 
     const handleSearchClick=()=>{
@@ -63,15 +95,51 @@ export default function UserTable() {
       setIsFilterOpen(false);
     };
 
+    const handleAddClick=()=>{
+      if(!emailCheck(email)){
+        console.log("Email is not valid. Please enter a valid email.");
+        setEmailError(true);
+        return;
+      }
+      if (name.length === 0 || surname.length === 0 || email.length === 0)  {
+        console.log("Empty string. Please check empty fields.");
+        setErrorSnackbarOpen(true);
+        return;
+      }
+      const addData={
+        name: name,
+        surname: surname,
+        email: email,
+        roleId: selectedRoleId,
+        departmentId: selectedDepartmentId,
+      };
+      //console.log(addData);
+      //console.log(token);
+      setAccessToken(token);
+      axios.post("https://delta.eu-west-1.elasticbeanstalk.com/users/create", addData,{
+        headers:{Authorization: token}
+      })
+      .then((Response)=>{
+        console.log(Response.data);
+        setSuccessSnackbarOpen(true);
+      })
+      .catch((Error)=>{
+        console.error("Error add user:",Error);
+        setErrorSnackbarOpen(true);
+      });
+    }
+
       const handleClear=()=>{
         setSearchItem('');
         setCompanyFilter('');
         setDepartmentFilter('');
         setFilteredRows(rows);
+        setSuccessSnackbarOpen(false);
+        setErrorSnackbarOpen(false);
+        setEmailError(false);
       }
 
    useEffect(()=>{
-    const token=localStorage.getItem('token');
     setAccessToken(token);
         axios.get("https://delta.eu-west-1.elasticbeanstalk.com/users/all",{
             params: {pageSize: 100},
@@ -97,7 +165,7 @@ export default function UserTable() {
                       height: 600, 
                       width: '70%',
                       flexGrow: 1, 
-                      minWidth: 700}}>
+                      }}>
       
       <DataGrid
           style={{color: 'whitesmoke',
@@ -142,6 +210,9 @@ export default function UserTable() {
             <IconButton style={{color: 'whitesmoke'}} onClick={() => setIsFilterOpen(true)}>
               <FilterListIcon/>
             </IconButton>   
+            <Button startIcon={<AddIcon />} style={{color: 'whitesmoke'}} onClick={()=> setIsAddOpen(true)}> 
+               ADD USER
+            </Button>
           </div>
           
           <Drawer  anchor="bottom" open={isFilterOpen} onClose={() => setIsFilterOpen(false)}> 
@@ -171,7 +242,7 @@ export default function UserTable() {
               </FormControl>
               </div>
               <div style={{ padding: '20px',display: 'flex', justifyContent: 'flex-start' }}>
-                <Button onClick={() => { setCompanyFilter(''); setDepartmentFilter(''); }} style={{ marginRight: '10px' }}>
+                <Button onClick={() => { setCompanyFilter(''); setDepartmentFilter(''); setFilteredRows(rows)}} style={{ marginRight: '10px' }}>
                   Clear Filters
                 </Button>
                 <Button onClick={() => setIsFilterOpen(false)} style={{ marginRight: '10px' }}>
@@ -182,6 +253,115 @@ export default function UserTable() {
                 </Button>
               </div>
           </Drawer> 
+
+          <Drawer  anchor="right" open={isAddOpen} onClose={() => setIsAddOpen(false)}> 
+          <h2 style={{fontFamily: 'Arial, Helvetica, sans-serif', padding: '10px'}}>Add User</h2>
+            <div style={{ width: 300, padding: '20px', marginBottom: '10px', display: 'flex', flexDirection: 'column'}} className='addContainer'>
+                <TextField
+                  required
+                  id="outlined-required"
+                  label="Name"
+                  placeholder='Enter your name'
+                  value={name}
+                  onChange={(e)=>setName(e.target.value)}
+                />
+                <TextField
+                  required
+                  id="outlined-required"
+                  label="Surname"
+                  placeholder='Enter your Surname'
+                  value={surname}
+                  onChange={(e)=>setSurname(e.target.value)}
+                  style={{ marginTop:'10px', borderRadius: '5px'}}
+                />
+                <TextField
+                  required
+                  id="outlined-required"
+                  label="Email Address"
+                  placeholder='Enter your Email Address'
+                  value={email}
+                  onChange={(e)=>setEmail(e.target.value)}
+                  style={{ marginTop:'10px', borderRadius: '5px'}}
+                />
+              </div>
+              <div style={{ width: 300, marginBottom: '10px', display: 'flex', flexDirection: 'column'}}>
+                <FormControl style={{width: '100%', left:'20px'}} >
+                  <InputLabel>Role</InputLabel>
+                  <Select value={role} onChange={(e) => setRole(e.target.value)}>
+                    {Array.from(new Set(rows.map((row) => row.role.name))).map((role) => (
+                      <MenuItem key={role} value={role}>
+                        {role}
+                      </MenuItem>
+                    ))}
+                  </Select>
+              </FormControl>
+              </div>
+              <div style={{ width: 300, padding: '20px', marginBottom: '10px', display: 'flex', flexDirection: 'column'}} className='filterContainer'>
+              <FormControl style={{width: '100%'}} >
+                <InputLabel>Company</InputLabel>
+                <Select value={companyFilter} onChange={(e)=>setCompanyFilter(e.target.value)}>
+                  {Array.from(new Set(rows.map((row) => row.company.name))).map((company) => (
+                    <MenuItem key={company} value={company}>
+                      {company}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              </div>
+              <div style={{ width: 300, marginBottom: '10px', display: 'flex', flexDirection: 'column'}}>
+                <FormControl style={{width: '100%', left:'20px'}} >
+                  <InputLabel>Department</InputLabel>
+                  <Select value={departmentFilter} onChange={(e) => setDepartmentFilter(e.target.value)}>
+                    {Array.from(new Set(rows.map((row) => row.department.name))).map((department) => (
+                      <MenuItem key={department} value={department}>
+                        {department}
+                      </MenuItem>
+                    ))}
+                  </Select>
+              </FormControl>
+              </div>
+              <div style={{ padding: '20px',display: 'flex', justifyContent: 'flex-start' }}>
+                <Button onClick={() => { setCompanyFilter(''); setDepartmentFilter(''); setRole(''); setName(''); setSurname(''); setEmail('')}} style={{ marginRight: '10px' }}>
+                  Clear
+                </Button>
+                <Button onClick={() => setIsAddOpen(false)} style={{ marginRight: '10px' }}>
+                  Cancel
+                </Button>
+                <div>
+                  <Button onClick={handleAddClick} color="primary" type='submit' className="addBtn">
+                  Add
+                </Button>
+                          <Snackbar open={successSnackbarOpen} 
+                                    autoHideDuration={3000} 
+                                    onClose={handleClear}
+                                    anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
+                            <Alert onClose={handleClear} 
+                                    severity="success" 
+                                    sx={{ width: '200%' }}>
+                                      User Added!                                  
+                            </Alert>
+                        </Snackbar>
+                        <Snackbar open={errorSnackbarOpen} 
+                                    autoHideDuration={3000} 
+                                    onClose={handleClear}
+                                    anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
+                            <Alert onClose={handleClear} severity="error" sx={{ width: '200%' }}>
+                                Strings are empty!
+                            </Alert>
+                          </Snackbar>
+                          <Snackbar open={emailError} 
+                                    autoHideDuration={3000} 
+                                    onClose={handleClear}
+                                    anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
+                            <Alert onClose={handleClear} 
+                                    severity="error" 
+                                    sx={{ width: '200%' }}>
+                                    Email does not meet the criteria.
+                            </Alert> 
+                        </Snackbar>
+                </div>
+              </div>
+          </Drawer>
       </div>
     </div>
     
