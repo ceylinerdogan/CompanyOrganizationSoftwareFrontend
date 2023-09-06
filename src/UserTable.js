@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { DataGrid, GridToolbarContainer } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { TextField, MenuItem, Select, InputLabel, FormControl, Drawer, Button, responsiveFontSizes } from '@mui/material';
+import { TextField, MenuItem, Select, InputLabel, FormControl, Drawer, Button } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -19,45 +19,8 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-
-
-
-
-const handleEditClick = () => {
- 
-};
-
+let editId=0;
 export default function UserTable() {
-  const columns = [
-    { field: 'id', headerName: 'ID', width: 90 },
-    { field: 'name', headerName: 'Name', width: 130 },
-    { field: 'surname', headerName: 'Surname', width: 130 },
-    { field: 'email', headerName: 'Email', width: 200 },
-    { field: 'role', headerName: 'Role', width: 90, valueGetter: (params) => `${params.row.role.name} ` },
-    { field: 'company', headerName: 'Company', width: 220, valueGetter: (params) => `${params.row.company.name} ` },
-    { field: 'department', headerName: 'Department', width: 180, valueGetter: (params) => `${params.row.department.name} ` },
-    {
-      field: 'actions', headerName: 'Actions', width: 100, sortable: false, renderCell: (params) => (
-        <div>
-          <IconButton
-            onClick={() => handleEditClick(params.row.id)}
-            color='success'
-            aria-label='edit'
-          >
-            <EditIcon />
-          </IconButton>
-          <IconButton
-            onClick={() => handleDeleteClick(params.row.id)}
-            color='success'
-            aria-label='delete'
-          >
-            <DeleteIcon />
-          </IconButton>
-        </div>
-      )
-    }
-  ];
-
   const [rows, setRows] = useState([]);
   const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
   const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
@@ -73,6 +36,7 @@ export default function UserTable() {
   const [surname, setSurname] = useState('');
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   //Bu errorlar çeviri dosyasında ona göre yazılacak ayrıca 
   //obje tanımlamaya gerek yok toggle yapılacak setNewPassword gibi
   //const [nameSurnameEmailError, setNameSurnameEmailError] = useState(false);
@@ -93,24 +57,102 @@ export default function UserTable() {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailPattern.test(email);
   }
-  
+
+  const columns = [
+    { field: 'id', headerName: 'ID', width: 90 },
+    { field: 'name', headerName: 'Name', width: 130 },
+    { field: 'surname', headerName: 'Surname', width: 130 },
+    { field: 'email', headerName: 'Email', width: 200 },
+    { field: 'role', headerName: 'Role', width: 90, valueGetter: (params) => `${params.row.role.name} ` },
+    { field: 'company', headerName: 'Company', width: 220, valueGetter: (params) => `${params.row.company.name} ` },
+    { field: 'department', headerName: 'Department', width: 180, valueGetter: (params) => `${params.row.department.name} ` },
+    {
+      field: 'actions', headerName: 'Actions', width: 100, sortable: false, renderCell: (params) => (
+        <div>
+          <IconButton
+            onClick={() => handleEditClick(params.row.id) }
+            style={{ color: 'whitesmoke' }}
+          >
+            <EditIcon />
+          </IconButton>
+          <IconButton
+            onClick={() => handleDeleteClick(params.row.id)}
+            style={{ color: 'whitesmoke' }}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </div>
+      )
+    }
+  ];
+
   const handleDeleteClick = (id) => {
-    console.log("delete",id);
-    const link= "https://delta.eu-west-1.elasticbeanstalk.com/users/"+id
+    console.log("delete", id);
+    const link = "https://delta.eu-west-1.elasticbeanstalk.com/users/" + id;
     axios.delete(link, {
       headers: { Authorization: token }
     })
-    .then((Response) => {
-      console.log("Row deleted",Response.data);
-      const updatedRows = rows.filter((item) => item.id !== id);
-      setRows(updatedRows);
-      setFilteredRows(updatedRows);
-      setSuccessSnackbarOpen(true);
+      .then((Response) => {
+        console.log("Row deleted", Response.data);
+        const updatedRows = rows.filter((item) => item.id !== id);
+        setRows(updatedRows);
+        setFilteredRows(updatedRows);
+        setSuccessSnackbarOpen(true);
+      })
+      .catch((Error) => {
+        console.error('Delete Failed', Error);
+        setErrorSnackbarOpen(true);
+      });
+  };
+
+  // const getUsersById = (id)=>{
+  //   const link = "https://delta.eu-west-1.elasticbeanstalk.com/users/"+id;
+  //   axios.get(link, {
+  //     headers: { Authorization: token }
+  //   })
+  //     .then((Response) => {
+  //       console.log("users found", Response.data);
+  //       const id = Response.data.id;
+  //       return id;
+  //     })
+  //     .catch((Error) => {
+  //       console.error('users not found', Error);
+  //       setErrorSnackbarOpen(true);
+  //     });
+  //     setEditDialogOpen(true);
+  // }
+
+  const handleEditClick = (id)=>{
+    setEditDialogOpen(true);
+    editId=id;
+  }
+
+  const handleEditSubmit = (id) => {
+    
+    const editData = {
+      name: name,
+      surname: surname,
+      email: email,
+      roleId: selectedRoleId,
+      departmentId: selectedDepartmentId
+    }
+    
+    console.log("edit", id);
+    console.log("edit data", editData);
+    const link = "https://delta.eu-west-1.elasticbeanstalk.com/users/" + id;
+    axios.put(link, editData, {
+      headers: { Authorization: token }
     })
-    .catch((Error) => {
-      console.error('Delete Failed',Error);
-      setErrorSnackbarOpen(true);
-    });
+      .then((Response) => {
+        console.log("Row Edited", Response.data);
+        const updatedRows = rows.filter((item) => item.id !== id);
+        getUsers();
+        setSuccessSnackbarOpen(true);
+      })
+      .catch((Error) => {
+        console.error('Edit Failed', Error);
+        setErrorSnackbarOpen(true);
+      });
   };
 
   const handleSearchClick = () => {
@@ -160,8 +202,8 @@ export default function UserTable() {
       roleId: selectedRoleId,
       departmentId: selectedDepartmentId,
     };
-    //console.log(addData);
-    //console.log(token);
+    console.log(addData);
+    console.log(token);
     setAccessToken(token);
     axios.post("https://delta.eu-west-1.elasticbeanstalk.com/users/create", addData, {
       headers: { Authorization: token }
@@ -271,6 +313,80 @@ export default function UserTable() {
             ADD USER
           </Button>
         </div>
+
+        <Drawer anchor="right" open={editDialogOpen} onClose={() => setEditDialogOpen(false)}>
+          <h2 style={{ fontFamily: 'Arial, Helvetica, sans-serif', padding: '10px' }}>Edit User</h2>
+          <div style={{ width: 300, padding: '20px', marginBottom: '10px', display: 'flex', flexDirection: 'column' }} className='addContainer'>
+            <TextField
+              label="Name"
+              placeholder='Enter name'
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <TextField
+              label="Surname"
+              placeholder='Enter Surname'
+              value={surname}
+              onChange={(e) => setSurname(e.target.value)}
+              style={{ marginTop: '10px', borderRadius: '5px' }}
+            />
+            <TextField
+              label="Email Address"
+              placeholder='Enter Email Address'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={{ marginTop: '10px', borderRadius: '5px' }}
+            />
+          </div>
+          <div style={{ width: 300, marginBottom: '10px', display: 'flex', flexDirection: 'column' }}>
+            <FormControl style={{ width: '100%', left: '20px' }} >
+              <InputLabel>Role</InputLabel>
+              <Select value={role} onChange={(e) => setRole(e.target.value)}>
+                {Array.from(new Set(rows.map((row) => row.role.name))).map((role) => (
+                  <MenuItem key={role} value={role}>
+                    {role}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+          <div style={{ width: 300, padding: '20px', marginBottom: '10px', display: 'flex', flexDirection: 'column' }} className='filterContainer'>
+            <FormControl style={{ width: '100%' }} >
+              <InputLabel>Company</InputLabel>
+              <Select value={companyFilter} onChange={(e) => setCompanyFilter(e.target.value)}>
+                {Array.from(new Set(rows.map((row) => row.company.name))).map((company) => (
+                  <MenuItem key={company} value={company}>
+                    {company}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+          <div style={{ width: 300, marginBottom: '10px', display: 'flex', flexDirection: 'column' }}>
+            <FormControl style={{ width: '100%', left: '20px' }} >
+              <InputLabel>Department</InputLabel>
+              <Select value={departmentFilter} onChange={(e) => setDepartmentFilter(e.target.value)}>
+                {Array.from(new Set(rows.map((row) => row.department.name))).map((department) => (
+                  <MenuItem key={department} value={department}>
+                    {department}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+          <div>
+            <Button onClick={() => { setCompanyFilter(''); setDepartmentFilter(''); setRole(''); setName(''); setSurname(''); setEmail('') }} style={{ marginRight: '10px' }}>
+              Clear
+            </Button>
+            <Button onClick={() => setEditDialogOpen(false)} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={() => handleEditSubmit(editId)} color="primary">
+              Save
+            </Button>
+          </div>
+        </Drawer>
+
 
         <Drawer anchor="bottom" open={isFilterOpen} onClose={() => setIsFilterOpen(false)}>
           <h2 style={{ fontFamily: 'Arial, Helvetica, sans-serif', padding: '10px' }}>Filters</h2>
