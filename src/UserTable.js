@@ -13,13 +13,18 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import DialogActions from '@mui/material/DialogActions';
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogContent from '@mui/material/DialogContent';
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-let editId=0;
+let editId = 0;
 export default function UserTable() {
   const [rows, setRows] = useState([]);
   const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
@@ -37,10 +42,13 @@ export default function UserTable() {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
   //Bu errorlar çeviri dosyasında ona göre yazılacak ayrıca 
   //obje tanımlamaya gerek yok toggle yapılacak setNewPassword gibi
   //const [nameSurnameEmailError, setNameSurnameEmailError] = useState(false);
   //const [roleCompanyDepartmentError, setRoleCompanyDepartmentError] = useState(false);
+  const userRole = localStorage.getItem('role');
   const token = localStorage.getItem('token');
   const roleMapping = {
     "Admin": 1,
@@ -52,6 +60,24 @@ export default function UserTable() {
   }
   const selectedRoleId = roleMapping[role];
   const selectedDepartmentId = departmentMapping[departmentFilter];
+
+  const getUsersById = (id) => {
+    const link = "https://delta.eu-west-1.elasticbeanstalk.com/users/" + id;
+    axios.get(link, {
+      headers: { Authorization: token }
+    })
+      .then((Response) => {
+        console.log("users found", Response.data);
+        const id = Response.data.id;
+        return id;
+      })
+      .catch((Error) => {
+        console.error('users not found', Error);
+        setErrorSnackbarOpen(true);
+      });
+  };
+
+  
 
   const emailCheck = (email) => {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -66,11 +92,15 @@ export default function UserTable() {
     { field: 'role', headerName: 'Role', width: 90, valueGetter: (params) => `${params.row.role.name} ` },
     { field: 'company', headerName: 'Company', width: 220, valueGetter: (params) => `${params.row.company.name} ` },
     { field: 'department', headerName: 'Department', width: 180, valueGetter: (params) => `${params.row.department.name} ` },
-    {
+
+  ];
+
+  if(userRole==='1'){
+    columns.push({
       field: 'actions', headerName: 'Actions', width: 100, sortable: false, renderCell: (params) => (
         <div>
           <IconButton
-            onClick={() => handleEditClick(params.row.id) }
+            onClick={() => handleEditClick(params.row.id)}
             style={{ color: 'whitesmoke' }}
           >
             <EditIcon />
@@ -83,52 +113,58 @@ export default function UserTable() {
           </IconButton>
         </div>
       )
-    }
-  ];
+    })
+  };
 
   const handleDeleteClick = (id) => {
-    console.log("delete", id);
-    const link = "https://delta.eu-west-1.elasticbeanstalk.com/users/" + id;
+    if (userRole === '1') {
+      setDeleteId(id);
+      setOpenDialog(true);
+    }
+    else {
+      alert('You have no permission to do this process');
+    }
+
+  };
+
+  const handleConfirmDelete = () => {
+    console.log("delete", deleteId);
+    const link = "https://delta.eu-west-1.elasticbeanstalk.com/users/" + deleteId;
     axios.delete(link, {
       headers: { Authorization: token }
     })
       .then((Response) => {
         console.log("Row deleted", Response.data);
-        const updatedRows = rows.filter((item) => item.id !== id);
+        const updatedRows = rows.filter((item) => item.id !== deleteId);
         setRows(updatedRows);
         setFilteredRows(updatedRows);
         setSuccessSnackbarOpen(true);
+        setOpenDialog(false);
       })
       .catch((Error) => {
         console.error('Delete Failed', Error);
         setErrorSnackbarOpen(true);
+        setOpenDialog(false);
       });
   };
 
-  // const getUsersById = (id)=>{
-  //   const link = "https://delta.eu-west-1.elasticbeanstalk.com/users/"+id;
-  //   axios.get(link, {
-  //     headers: { Authorization: token }
-  //   })
-  //     .then((Response) => {
-  //       console.log("users found", Response.data);
-  //       const id = Response.data.id;
-  //       return id;
-  //     })
-  //     .catch((Error) => {
-  //       console.error('users not found', Error);
-  //       setErrorSnackbarOpen(true);
-  //     });
-  //     setEditDialogOpen(true);
-  // }
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
-  const handleEditClick = (id)=>{
-    setEditDialogOpen(true);
-    editId=id;
-  }
+  const handleEditClick = (id) => {
+    if (userRole === '1') {
+      setEditDialogOpen(true);
+      editId = id;
+    }
+    else {
+      alert('You have no permission to do this process');
+    }
+  };
+
 
   const handleEditSubmit = (id) => {
-    
+
     const editData = {
       name: name,
       surname: surname,
@@ -136,7 +172,7 @@ export default function UserTable() {
       roleId: selectedRoleId,
       departmentId: selectedDepartmentId
     }
-    
+
     console.log("edit", id);
     console.log("edit data", editData);
     const link = "https://delta.eu-west-1.elasticbeanstalk.com/users/" + id;
@@ -255,7 +291,7 @@ export default function UserTable() {
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90vh' }}>
       <div className='table'
         style={{
-          backgroundColor: 'rgb(28, 42, 0)',
+          backgroundColor: 'rgb(50, 68, 14)',
           position: 'absolute',
           height: 600,
           width: '70%',
@@ -272,6 +308,7 @@ export default function UserTable() {
           initialState={{
             pagination: {
               paginationModel: { page: 0, pageSize: 5 },
+              style: {color: 'whitesmoke'}
 
             },
           }}
@@ -313,6 +350,21 @@ export default function UserTable() {
             ADD USER
           </Button>
         </div>
+
+        <Dialog open={openDialog} onClose={handleCloseDialog}>
+          <DialogTitle>Confirm Delete</DialogTitle>
+          <DialogContent>
+            <DialogContentText>Are you sure you want to delete the user?</DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDialog} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={handleConfirmDelete} color="primary">
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
 
         <Drawer anchor="right" open={editDialogOpen} onClose={() => setEditDialogOpen(false)}>
           <h2 style={{ fontFamily: 'Arial, Helvetica, sans-serif', padding: '10px' }}>Edit User</h2>
