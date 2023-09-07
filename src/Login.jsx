@@ -58,10 +58,11 @@ const Login = () => {
             .then((Response) => {
                 console.log(Response.data);
                 setSuccessSnackbarOpen(true);
-                navigate5('/usertable');
+                navigate5('/homepage');
 
                 localStorage.setItem('token', Response.data.data.accessToken);
                 localStorage.setItem('role', Response.data.data.user.role.id);
+                localStorage.setItem('id', Response.data.data.user.id);
             })
             .catch((Error) => {
                 console.error("Error login:", Error);
