@@ -21,6 +21,7 @@ const Login = () => {
     const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
     const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
     const [emailError, setEmailError] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(true);
     const navigate1 = useNavigate();
     const navigate2 = useNavigate();
     // const navigate3 = useNavigate();
@@ -42,6 +43,7 @@ const Login = () => {
         if (!emailCheck(email)) {
             console.log("Email is not valid. Please enter a valid email.");
             setEmailError(true);
+            setLoggedIn(true);
             return;
         }
         if (password.length === 0) {
