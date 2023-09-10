@@ -60,14 +60,14 @@ function Homepage() {
                     <MenuIcon sx={{ fontSize: 30 }} />
                 </Button>
                 <Drawer anchor="left" open={isMenuOpen} onClose={() => setIsMenuOpen(false)}>
-                    <h2 style={{ fontFamily: 'Arial, Helvetica, sans-serif', padding: '10px' }}>Menu</h2>
+                    <h2 style={{ fontFamily: 'Arial, Helvetica, sans-serif', padding: '10px' }}>{t('homepage.menu')}</h2>
                     <div >
                         <Button style={{ marginRight: '50px', marginLeft: '10px', color: 'black' }}>
-                            {t('usertable.homepage')}
+                            {t('homepage.homepage')}
                         </Button>
                         <div>
                             <Button onClick={handleClickUserTable} style={{ marginRight: '50px', marginLeft: '10px', color: 'black' }} color="primary">
-                                {t('usertable.users')}
+                                {t('homepage.users')}
                             </Button>
                         </div>
                         <div>
@@ -78,7 +78,7 @@ function Homepage() {
                                     </Button>
                                 </>
                             ) : (
-                                <p>{t('usertable.pleaseLogin')}</p>
+                                <p>{t('homepage.pleaseLogin')}</p>
                             )}
                         </div>
 
@@ -95,15 +95,15 @@ function Homepage() {
                             width: '400px', height: '275px',
                             fontFamily: 'Arial, Helvetica, sans-serif'
                         }} >
-                            <h1>{t('usertable.userInformations')}</h1>
-                            <p>{t('usertable.name')} {userData.data.name}</p>
-                            <p>{t('usertable.surname')} {userData.data.surname}</p>
-                            <p>{t('usertable.company')} {userData.data.company.name}</p>
-                            <p>{t('usertable.department')} {userData.data.department.name}</p>
-                            <p>{t('usertable.role')} {userData.data.role.name}</p>
+                            <h1>{t('homepage.userInformations')}</h1>
+                            <p>{t('homepage.name')} {userData.data.name}</p>
+                            <p>{t('homepage.surname')} {userData.data.surname}</p>
+                            <p>{t('homepage.company')} {userData.data.company.name}</p>
+                            <p>{t('homepage.department')} {userData.data.department.name}</p>
+                            <p>{t('homepage.role')} {userData.data.role.name}</p>
                         </div>
                     ) : (
-                        <p>{t('usertable.dataLoading')}</p>
+                        <p>{t('homepage.dataLoading')}</p>
                     )}
                 </div>
             </div>

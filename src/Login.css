@@ -7,7 +7,7 @@
 
 .box-login{
     width: 460px;
-    height: 350px;
+    height: 370px;
     background-color: rgb(28, 42, 0) ;
     padding: 20px;
     border-radius: 10px;
@@ -16,7 +16,7 @@
 .login{
     font-size: 25px;
     font-weight: bold;
-    margin-top: 0px;
+    margin-top: 5px;
     position: relative;
     font-family:Arial, Helvetica, sans-serif;
     color: whitesmoke;
@@ -43,7 +43,7 @@
 .labelPass{
     position: relative;
     top: 15px;
-    right: 188px;
+    margin-right: 500px;
     font-size: 18px;
     font-family:Arial, Helvetica, sans-serif;
     color: whitesmoke;
@@ -60,6 +60,7 @@
     font-family:Arial, Helvetica, sans-serif;
 }
 .signInbtn{
+    position: relative;
     top: 35px;
 }
 .forgotpassbtn{

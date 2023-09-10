@@ -97,7 +97,8 @@
       "company": "Company:",
       "department": "Department:",
       "role": "Role:",
-      "dataLoading": "Data is loading..."
+      "dataLoading": "Data is loading...",
+      "menu": "Menü"
     }
   }
   

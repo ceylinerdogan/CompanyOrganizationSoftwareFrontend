@@ -134,7 +134,7 @@ const Login = () => {
                             onSubmit={handleSubmit}
                             type="submit"
                             style={{
-                                padding: '10px 200px',
+                                padding: '10px 180px',
                                 borderRadius: '5px',
                                 fontFamily: 'Arial, Helvetica, sans-serif',
                             }}

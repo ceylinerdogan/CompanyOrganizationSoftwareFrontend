@@ -98,6 +98,7 @@
       "company": "Şirket:",
       "department": "Departman:",
       "role": "Rol:",
-      "dataLoading": "Veriler yükleniyor..."
+      "dataLoading": "Veriler yükleniyor...",
+      "menu": "Menü"
     }
 }    
