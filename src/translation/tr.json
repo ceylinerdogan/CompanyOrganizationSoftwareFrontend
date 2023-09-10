@@ -53,6 +53,51 @@
          "emptyPassword": "Şifre boş. Lütfen geçerli bir şifre girin.",
          "criteriaNotMet": "Şifre kriterlerini sağlamıyor. Lütfen tüm kriterlerin karşılandığından emin olun.",
         "tryAgainLink1": " <a href='https://company-organization-software-coral.vercel.app/activateuser'>Tekrar mail göndermek için buraya tıklayın</a>.",
-        "tryAgainLink2": " <a href='https://company-organization-software-coral.vercel.app/resetpassword'>Tekrar mail göndermek için buraya tıklayın</a>."
-      }
+        "tryAgainLink2": " <a href='https://company-organization-software-coral.vercel.app/resetpassword'>Tekrar mail göndermek için buraya tıklayın</a>.",
+        "notDeleted":   "Kullanıcı Silinemedi! Lütfen tekrar deneyin.",
+        "notAdded": "Kullanıcı eklenemedi! Lütfen tekrar deneyin.",
+        "stringEmpty": "Metin kutularından biri boş olabilir!",
+        "emailError": "Lütfen geçerli bir e-posta adresi girin"
+      },
+      "usertable":{
+        "homepage": "Anasayfa",
+        "users": "Kullanıcılar",
+        "pleaseLogin": "Lütfen giriş yapın",
+        "addUser": "Kullanıcı Ekle",
+        "cancel": "İptal",
+        "delete":  "Sil",
+        "clear": "Temizle",
+        "save": "Kaydet",
+        "confirmDelete": "Silmeyi Onayla",
+        "areyousure": "Bu kullanıcıyı silmek istediğinizden emin misiniz?",
+        "enterName": "İsim girin",
+        "enterSurname": "Soyadı girin",
+        "enterEmail": "E-posta adresi girin",
+        "name": "İsim",
+        "surname": "Soyadı",
+        "email": "E-posta",
+        "role": "Rol",
+        "company": "Şirket",
+        "department": "Departman",
+        "filter": "Filtrele",
+        "add": "Ekle",
+        "editUser": "Kullanıcıyı Düzenle",
+        "filters": "Filtre",
+        "menu": "Menü",
+        "search": "Arama yap...",
+        "addSuccessful": "Kullanıcı eklendi!",
+        "successfulMessage": "Kullanıcı silindi!"
+    },
+    "homepage":{
+      "homepage": "Anasayfa",
+      "users": "Kullanıcılar",
+      "pleaseLogin": "Lütfen giriş yapın",
+      "userInformations": "Kullanıcı Bilgileri",
+      "name": "İsim:",
+      "surname":"Soyadı:",
+      "company": "Şirket:",
+      "department": "Departman:",
+      "role": "Rol:",
+      "dataLoading": "Veriler yükleniyor..."
+    }
 }    

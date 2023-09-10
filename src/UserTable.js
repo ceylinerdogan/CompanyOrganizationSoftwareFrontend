@@ -21,6 +21,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogContent from '@mui/material/DialogContent';
 import { useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { useTranslation } from 'react-i18next';
+
+
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -29,6 +32,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 let editId = 0;
 export default function UserTable() {
+  const { t } = useTranslation();
   const [rows, setRows] = useState([]);
   const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
   const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
@@ -68,21 +72,21 @@ export default function UserTable() {
   const selectedRoleId = roleMapping[role];
   const selectedDepartmentId = departmentMapping[departmentFilter];
 
-  const getUsersById = (id) => {
-    const link = "https://delta.eu-west-1.elasticbeanstalk.com/users/" + id;
-    axios.get(link, {
-      headers: { Authorization: token }
-    })
-      .then((Response) => {
-        console.log("users found", Response.data);
-        const id = Response.data.id;
-        return id;
-      })
-      .catch((Error) => {
-        console.error('users not found', Error);
-        setErrorSnackbarOpen(true);
-      });
-  };
+  // const getUsersById = (id) => {
+  //   const link = "https://delta.eu-west-1.elasticbeanstalk.com/users/" + id;
+  //   axios.get(link, {
+  //     headers: { Authorization: token }
+  //   })
+  //     .then((Response) => {
+  //       console.log("users found", Response.data);
+  //       const id = Response.data.id;
+  //       return id;
+  //     })
+  //     .catch((Error) => {
+  //       console.error('users not found', Error);
+  //       setErrorSnackbarOpen(true);
+  //     });
+  // };
 
 
 
@@ -139,7 +143,6 @@ export default function UserTable() {
         const updatedRows = rows.filter((item) => item.id !== deleteId);
         setRows(updatedRows);
         setFilteredRows(updatedRows);
-        setSuccessSnackbarOpen(true);
         setOpenDialog(false);
       })
       .catch((Error) => {
@@ -304,14 +307,14 @@ export default function UserTable() {
           <MenuIcon sx={{ fontSize: 30 }} />
         </Button>
         <Drawer anchor="left" open={isMenuOpen} onClose={() => setIsMenuOpen(false)}>
-          <h2 style={{ fontFamily: 'Arial, Helvetica, sans-serif', padding: '10px' }}>Menu</h2>
+          <h2 style={{ fontFamily: 'Arial, Helvetica, sans-serif', padding: '10px' }}>{t('usertable.menu')}</h2>
           <div >
             <Button onClick={handleClickHomepage} style={{ marginRight: '50px', marginLeft: '10px', color: 'black' }}>
-              Homepage
+              {t('usertable.homepage')}
             </Button>
             <div>
               <Button style={{ marginRight: '50px', marginLeft: '10px', color: 'black' }} color="primary">
-                Users
+                {t('usertable.users')}
               </Button>
             </div>
             <div>
@@ -322,7 +325,7 @@ export default function UserTable() {
                   </Button>
                 </>
               ) : (
-                <p>Please login</p>
+                <p>{t('usertable.pleaseLogin')}</p>
               )}
             </div>
           </div>
@@ -360,7 +363,7 @@ export default function UserTable() {
               style={{ position: 'absolute', bottom: -3, padding: '10px' }}>
 
               <TextField type="text"
-                placeholder="Search..."
+                placeholder={t('usertable.search')}
                 value={searchItem}
                 className='searchField'
                 size="small"
@@ -387,45 +390,63 @@ export default function UserTable() {
                 <FilterListIcon />
               </IconButton>
               <Button startIcon={<AddIcon />} style={{ color: 'whitesmoke' }} onClick={() => setIsAddOpen(true)}>
-                ADD USER
+                {t('usertable.addUser')}
               </Button>
             </div>
 
             <Dialog open={openDialog} onClose={handleCloseDialog}>
-              <DialogTitle>Confirm Delete</DialogTitle>
+              <DialogTitle>{t('usertable.confirmDelete')}</DialogTitle>
               <DialogContent>
-                <DialogContentText>Are you sure you want to delete user?</DialogContentText>
+                <DialogContentText>{t('usertable.areyousure')}</DialogContentText>
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleCloseDialog} color="primary">
-                  Cancel
+                  {t('usertable.cancel')}
                 </Button>
                 <Button onClick={handleConfirmDelete} color="primary">
-                  Delete
+                  {t('usertable.delete')}
                 </Button>
+                <Snackbar open={successSnackbarOpen}
+                  autoHideDuration={3000}
+                  onClose={handleCloseDialog}
+                  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                  <Alert onClose={handleCloseDialog}
+                    severity="success"
+                    sx={{ width: '200%' }}>
+                    {t('usertable.successfulMessage')}
+                  </Alert>
+                </Snackbar>
+                <Snackbar open={errorSnackbarOpen}
+                  autoHideDuration={3000}
+                  onClose={handleCloseDialog}
+                  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                  <Alert onClose={handleCloseDialog} severity="error" sx={{ width: '200%' }}>
+                    {t('snackbarErrors.notDeleted')}
+                  </Alert>
+                </Snackbar>
               </DialogActions>
             </Dialog>
 
 
             <Drawer anchor="right" open={editDialogOpen} onClose={() => setEditDialogOpen(false)}>
-              <h2 style={{ fontFamily: 'Arial, Helvetica, sans-serif', padding: '10px' }}>Edit User</h2>
+              <h2 style={{ fontFamily: 'Arial, Helvetica, sans-serif', padding: '10px' }}>{t('usertable.editUser')}</h2>
               <div style={{ width: 300, padding: '20px', marginBottom: '10px', display: 'flex', flexDirection: 'column' }} className='addContainer'>
                 <TextField
-                  label="Name"
-                  placeholder='Enter name'
+                  label={t('usertable.name')}
+                  placeholder={t('usertable.enterName')}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
                 <TextField
-                  label="Surname"
-                  placeholder='Enter Surname'
+                  label={t('usertable.surname')}
+                  placeholder={t('usertable.enterSurname')}
                   value={surname}
                   onChange={(e) => setSurname(e.target.value)}
                   style={{ marginTop: '10px', borderRadius: '5px' }}
                 />
                 <TextField
-                  label="Email Address"
-                  placeholder='Enter Email Address'
+                  label={t('usertable.email')}
+                  placeholder={t('usertable.enterEmail')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   style={{ marginTop: '10px', borderRadius: '5px' }}
@@ -433,7 +454,7 @@ export default function UserTable() {
               </div>
               <div style={{ width: 300, marginBottom: '10px', display: 'flex', flexDirection: 'column' }}>
                 <FormControl style={{ width: '100%', left: '20px' }} >
-                  <InputLabel>Role</InputLabel>
+                  <InputLabel>{t('usertable.role')}</InputLabel>
                   <Select value={role} onChange={(e) => setRole(e.target.value)}>
                     {Array.from(new Set(rows.map((row) => row.role.name))).map((role) => (
                       <MenuItem key={role} value={role}>
@@ -445,7 +466,7 @@ export default function UserTable() {
               </div>
               <div style={{ width: 300, padding: '20px', marginBottom: '10px', display: 'flex', flexDirection: 'column' }} className='filterContainer'>
                 <FormControl style={{ width: '100%' }} >
-                  <InputLabel>Company</InputLabel>
+                  <InputLabel>{t('usertable.company')}</InputLabel>
                   <Select value={companyFilter} onChange={(e) => setCompanyFilter(e.target.value)}>
                     {Array.from(new Set(rows.map((row) => row.company.name))).map((company) => (
                       <MenuItem key={company} value={company}>
@@ -457,7 +478,7 @@ export default function UserTable() {
               </div>
               <div style={{ width: 300, marginBottom: '10px', display: 'flex', flexDirection: 'column' }}>
                 <FormControl style={{ width: '100%', left: '20px' }} >
-                  <InputLabel>Department</InputLabel>
+                  <InputLabel>{t('usertable.department')}</InputLabel>
                   <Select value={departmentFilter} onChange={(e) => setDepartmentFilter(e.target.value)}>
                     {Array.from(new Set(rows.map((row) => row.department.name))).map((department) => (
                       <MenuItem key={department} value={department}>
@@ -469,23 +490,41 @@ export default function UserTable() {
               </div>
               <div>
                 <Button onClick={() => { setCompanyFilter(''); setDepartmentFilter(''); setRole(''); setName(''); setSurname(''); setEmail('') }} style={{ marginRight: '10px' }}>
-                  Clear
+                  {t('usertable.clear')}
                 </Button>
                 <Button onClick={() => setEditDialogOpen(false)} color="primary">
-                  Cancel
+                  {t('usertable.cancel')}
                 </Button>
                 <Button onClick={() => handleEditSubmit(editId)} color="primary">
-                  Save
+                  {t('usertable.save')}
                 </Button>
+                <Snackbar open={successSnackbarOpen}
+                  autoHideDuration={3000}
+                  onClose={handleCloseDialog}
+                  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                  <Alert onClose={handleCloseDialog}
+                    severity="success"
+                    sx={{ width: '200%' }}>
+                    {t('usertable.addSuccessful')}
+                  </Alert>
+                </Snackbar>
+                <Snackbar open={errorSnackbarOpen}
+                  autoHideDuration={3000}
+                  onClose={handleCloseDialog}
+                  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                  <Alert onClose={handleCloseDialog} severity="error" sx={{ width: '200%' }}>
+                    {t('snackbarErrors.notAdded')}
+                  </Alert>
+                </Snackbar>
               </div>
             </Drawer>
 
 
             <Drawer anchor="bottom" open={isFilterOpen} onClose={() => setIsFilterOpen(false)}>
-              <h2 style={{ fontFamily: 'Arial, Helvetica, sans-serif', padding: '10px' }}>Filters</h2>
+              <h2 style={{ fontFamily: 'Arial, Helvetica, sans-serif', padding: '10px' }}>{t('usertable.filters')}</h2>
               <div style={{ width: 500, padding: '20px', marginBottom: '30px', display: 'flex', flexDirection: 'column' }} className='filterContainer'>
                 <FormControl style={{ width: '100%', backgroundColor: 'whitesmoke' }} >
-                  <InputLabel>Company</InputLabel>
+                  <InputLabel>{t('usertable.company')}</InputLabel>
                   <Select value={companyFilter} onChange={(e) => setCompanyFilter(e.target.value)}>
                     {Array.from(new Set(rows.map((row) => row.company.name))).map((company) => (
                       <MenuItem key={company} value={company}>
@@ -497,7 +536,7 @@ export default function UserTable() {
               </div>
               <div style={{ width: 500, marginBottom: '80px', display: 'flex', flexDirection: 'column' }}>
                 <FormControl style={{ width: '100%', backgroundColor: 'whitesmoke', left: '20px' }} >
-                  <InputLabel>Department</InputLabel>
+                  <InputLabel>{t('usertable.department')}</InputLabel>
                   <Select value={departmentFilter} onChange={(e) => setDepartmentFilter(e.target.value)}>
                     {Array.from(new Set(rows.map((row) => row.department.name))).map((department) => (
                       <MenuItem key={department} value={department}>
@@ -509,33 +548,33 @@ export default function UserTable() {
               </div>
               <div style={{ padding: '20px', display: 'flex', justifyContent: 'flex-start' }}>
                 <Button onClick={() => { setCompanyFilter(''); setDepartmentFilter(''); setFilteredRows(rows) }} style={{ marginRight: '10px' }}>
-                  Clear Filters
+                  {t('usertable.clear')}
                 </Button>
                 <Button onClick={() => setIsFilterOpen(false)} style={{ marginRight: '10px' }}>
-                  Cancel
+                  {t('usertable.cancel')}
                 </Button>
                 <Button onClick={handleFilteredClick} color="primary">
-                  Filter
+                  {t('usertable.filter')}
                 </Button>
               </div>
             </Drawer>
 
             <Drawer anchor="right" open={isAddOpen} onClose={() => setIsAddOpen(false)}>
-              <h2 style={{ fontFamily: 'Arial, Helvetica, sans-serif', padding: '10px' }}>Add User</h2>
+              <h2 style={{ fontFamily: 'Arial, Helvetica, sans-serif', padding: '10px' }}>{t('usertable.addUser')}</h2>
               <div style={{ width: 300, padding: '20px', marginBottom: '10px', display: 'flex', flexDirection: 'column' }} className='addContainer'>
                 <TextField
                   required
                   id="outlined-required"
-                  label="Name"
-                  placeholder='Enter your name'
+                  label={t('usertable.name')}
+                  placeholder={t('usertable.enterName')}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
                 <TextField
                   required
                   id="outlined-required"
-                  label="Surname"
-                  placeholder='Enter your Surname'
+                  label={t('usertable.surname')}
+                  placeholder={t('usertable.enterSurname')}
                   value={surname}
                   onChange={(e) => setSurname(e.target.value)}
                   style={{ marginTop: '10px', borderRadius: '5px' }}
@@ -543,8 +582,8 @@ export default function UserTable() {
                 <TextField
                   required
                   id="outlined-required"
-                  label="Email Address"
-                  placeholder='Enter your Email Address'
+                  label={t('usertable.email')}
+                  placeholder={t('usertable.enterEmail')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   style={{ marginTop: '10px', borderRadius: '5px' }}
@@ -552,7 +591,7 @@ export default function UserTable() {
               </div>
               <div style={{ width: 300, marginBottom: '10px', display: 'flex', flexDirection: 'column' }}>
                 <FormControl style={{ width: '100%', left: '20px' }} >
-                  <InputLabel>Role</InputLabel>
+                  <InputLabel>{t('usertable.role')}</InputLabel>
                   <Select value={role} onChange={(e) => setRole(e.target.value)}>
                     {Array.from(new Set(rows.map((row) => row.role.name))).map((role) => (
                       <MenuItem key={role} value={role}>
@@ -564,7 +603,7 @@ export default function UserTable() {
               </div>
               <div style={{ width: 300, padding: '20px', marginBottom: '10px', display: 'flex', flexDirection: 'column' }} className='filterContainer'>
                 <FormControl style={{ width: '100%' }} >
-                  <InputLabel>Company</InputLabel>
+                  <InputLabel>{t('usertable.company')}</InputLabel>
                   <Select value={companyFilter} onChange={(e) => setCompanyFilter(e.target.value)}>
                     {Array.from(new Set(rows.map((row) => row.company.name))).map((company) => (
                       <MenuItem key={company} value={company}>
@@ -576,7 +615,7 @@ export default function UserTable() {
               </div>
               <div style={{ width: 300, marginBottom: '10px', display: 'flex', flexDirection: 'column' }}>
                 <FormControl style={{ width: '100%', left: '20px' }} >
-                  <InputLabel>Department</InputLabel>
+                  <InputLabel>{t('usertable.department')}</InputLabel>
                   <Select value={departmentFilter} onChange={(e) => setDepartmentFilter(e.target.value)}>
                     {Array.from(new Set(rows.map((row) => row.department.name))).map((department) => (
                       <MenuItem key={department} value={department}>
@@ -588,14 +627,14 @@ export default function UserTable() {
               </div>
               <div style={{ padding: '20px', display: 'flex', justifyContent: 'flex-start' }}>
                 <Button onClick={() => { setCompanyFilter(''); setDepartmentFilter(''); setRole(''); setName(''); setSurname(''); setEmail('') }} style={{ marginRight: '10px' }}>
-                  Clear
+                {t('usertable.clear')}
                 </Button>
                 <Button onClick={() => setIsAddOpen(false)} style={{ marginRight: '10px' }}>
-                  Cancel
+                {t('usertable.cancel')}
                 </Button>
                 <div>
                   <Button onClick={handleAddClick} color="primary" type='submit' className="addBtn">
-                    Add
+                  {t('usertable.add')}
                   </Button>
                   <Snackbar open={successSnackbarOpen}
                     autoHideDuration={3000}
@@ -604,7 +643,7 @@ export default function UserTable() {
                     <Alert onClose={handleClear}
                       severity="success"
                       sx={{ width: '200%' }}>
-                      User Added!
+                      {t('usertable.addSuccessful')}
                     </Alert>
                   </Snackbar>
                   <Snackbar open={errorSnackbarOpen}
@@ -612,7 +651,7 @@ export default function UserTable() {
                     onClose={handleClear}
                     anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
                     <Alert onClose={handleClear} severity="error" sx={{ width: '200%' }}>
-                      Strings are empty!
+                    {t('snackbarErrors.stringEmpty')}
                     </Alert>
                   </Snackbar>
                   <Snackbar open={emailError}
@@ -622,7 +661,7 @@ export default function UserTable() {
                     <Alert onClose={handleClear}
                       severity="error"
                       sx={{ width: '200%' }}>
-                      Email does not meet the criteria.
+                        {t('snackbarErrors.emailError')}
                     </Alert>
                   </Snackbar>
                 </div>
@@ -631,10 +670,7 @@ export default function UserTable() {
           </div>
         </div>
       </div>
-
-
     );
   }
-
 }
 

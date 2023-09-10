@@ -52,7 +52,52 @@
         "emptyPassword": "Password is empty. Please enter a valid password.",
         "criteriaNotMet": "Password does not meet the criteria. Please make sure all criteria are satisfied.",
         "tryAgainLink1": " <a href='https://company-organization-software-coral.vercel.app/activateuser'>Click here to send mail again.</a>.",
-        "tryAgainLink2": " <a href='https://company-organization-software-coral.vercel.app/resetpassword'>Click here to send mail again.</a>."
-      }
+        "tryAgainLink2": " <a href='https://company-organization-software-coral.vercel.app/resetpassword'>Click here to send mail again.</a>.",
+        "notDeleted":   "User could not be deleted! Please try again.",
+        "notAdded": "User could not be added! Please try again.",
+        "stringEmpty": "Strings are empty!",
+        "emailError": "Email does not meet the criteria."
+      },
+    "usertable":{
+        "homepage": "Homepage",
+        "users": "Users",
+        "pleaseLogin": "Please Login",
+        "addUser": "Add User",
+        "cancel": "Cancel",
+        "delete":  "Delete",
+        "clear": "Clear",
+        "save": "Save",
+        "confirmDelete": "Confirm Delete",
+        "areyousure": "Are you sure you want to delete user?",
+        "enterName": "Enter Name",
+        "enterSurname": "Enter Surname",
+        "enterEmail": "Enter Email Address",
+        "name": "Name",
+        "surname": "Surname",
+        "email": "Email",
+        "role": "Role",
+        "company": "Company",
+        "department": "Department",
+        "filter": "Filter",
+        "add": "Add",
+        "editUser": "Edit User",
+        "filters": "Filters",
+        "menu": "Menu",
+        "search": "Search...",
+        "addSuccessful": "User added",
+        "successfulMessage": "User Deleted"
+    },
+    "homepage":{
+      "homepage": "Homepage",
+      "users": "Users",
+      "pleaseLogin": "Please Login",
+      "userInformations": "User Informations",
+      "name": "Name:",
+      "surname":"Surname:",
+      "company": "Company:",
+      "department": "Department:",
+      "role": "Role:",
+      "dataLoading": "Data is loading..."
+    }
   }
   

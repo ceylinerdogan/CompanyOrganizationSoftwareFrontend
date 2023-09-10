@@ -4,8 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Drawer, Button } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { useTranslation } from 'react-i18next';
 
 function Homepage() {
+    const { t } = useTranslation();
     const [userData, setUserData] = useState(null);
     const [accessToken, setAccessToken] = useState('');
     const [id, setId] = useState('');
@@ -41,11 +43,9 @@ function Homepage() {
             .then((Response) => {
                 console.log("user found", Response.data);
                 setUserData(Response.data);
-                setSuccessSnackbarOpen(true);
             })
             .catch((Error) => {
                 console.error('user not found', Error);
-                setErrorSnackbarOpen(true);
             });
     },
         []);
@@ -63,11 +63,11 @@ function Homepage() {
                     <h2 style={{ fontFamily: 'Arial, Helvetica, sans-serif', padding: '10px' }}>Menu</h2>
                     <div >
                         <Button style={{ marginRight: '50px', marginLeft: '10px', color: 'black' }}>
-                            Homepage
+                            {t('usertable.homepage')}
                         </Button>
                         <div>
                             <Button onClick={handleClickUserTable} style={{ marginRight: '50px', marginLeft: '10px', color: 'black' }} color="primary">
-                                Users
+                                {t('usertable.users')}
                             </Button>
                         </div>
                         <div>
@@ -78,7 +78,7 @@ function Homepage() {
                                     </Button>
                                 </>
                             ) : (
-                                <p>Please login</p>
+                                <p>{t('usertable.pleaseLogin')}</p>
                             )}
                         </div>
 
@@ -95,15 +95,15 @@ function Homepage() {
                             width: '400px', height: '275px',
                             fontFamily: 'Arial, Helvetica, sans-serif'
                         }} >
-                            <h1>User Informations</h1>
-                            <p>Name: {userData.data.name}</p>
-                            <p>Surname: {userData.data.surname}</p>
-                            <p>Company: {userData.data.company.name}</p>
-                            <p>Department: {userData.data.department.name}</p>
-                            <p>Role: {userData.data.role.name}</p>
+                            <h1>{t('usertable.userInformations')}</h1>
+                            <p>{t('usertable.name')} {userData.data.name}</p>
+                            <p>{t('usertable.surname')} {userData.data.surname}</p>
+                            <p>{t('usertable.company')} {userData.data.company.name}</p>
+                            <p>{t('usertable.department')} {userData.data.department.name}</p>
+                            <p>{t('usertable.role')} {userData.data.role.name}</p>
                         </div>
                     ) : (
-                        <p>Data is loading...</p>
+                        <p>{t('usertable.dataLoading')}</p>
                     )}
                 </div>
             </div>
