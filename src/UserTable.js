@@ -143,14 +143,26 @@ export default function UserTable() {
         const updatedRows = rows.filter((item) => item.id !== deleteId);
         setRows(updatedRows);
         setFilteredRows(updatedRows);
-        setOpenDialog(false);
+        handleCloseDialog();
+        setSuccessSnackbarOpen(true);
+        
       })
       .catch((Error) => {
         console.error('Delete Failed', Error);
+        handleCloseDialog();
         setErrorSnackbarOpen(true);
-        setOpenDialog(false);
+        
       });
   };
+
+  const handleClose = (reason) => {
+    if (reason === 'clickaway') {
+        return;
+    }
+    setSuccessSnackbarOpen(false);
+    setErrorSnackbarOpen(false);
+};
+
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
@@ -408,9 +420,9 @@ export default function UserTable() {
                 </Button>
                 <Snackbar open={successSnackbarOpen}
                   autoHideDuration={3000}
-                  onClose={handleCloseDialog}
+                  onClose={handleClose}
                   anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
-                  <Alert onClose={handleCloseDialog}
+                  <Alert onClose={handleClose}
                     severity="success"
                     sx={{ width: '200%' }}>
                     {t('usertable.successfulMessage')}
@@ -418,9 +430,9 @@ export default function UserTable() {
                 </Snackbar>
                 <Snackbar open={errorSnackbarOpen}
                   autoHideDuration={3000}
-                  onClose={handleCloseDialog}
+                  onClose={handleClose}
                   anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
-                  <Alert onClose={handleCloseDialog} severity="error" sx={{ width: '200%' }}>
+                  <Alert onClose={handleClose} severity="error" sx={{ width: '200%' }}>
                     {t('snackbarErrors.notDeleted')}
                   </Alert>
                 </Snackbar>
@@ -505,7 +517,7 @@ export default function UserTable() {
                   <Alert onClose={handleCloseDialog}
                     severity="success"
                     sx={{ width: '200%' }}>
-                    {t('usertable.addSuccessful')}
+                    {t('usertable.editSuccessful')}
                   </Alert>
                 </Snackbar>
                 <Snackbar open={errorSnackbarOpen}
@@ -513,7 +525,7 @@ export default function UserTable() {
                   onClose={handleCloseDialog}
                   anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
                   <Alert onClose={handleCloseDialog} severity="error" sx={{ width: '200%' }}>
-                    {t('snackbarErrors.notAdded')}
+                    {t('snackbarErrors.notEdited')}
                   </Alert>
                 </Snackbar>
               </div>

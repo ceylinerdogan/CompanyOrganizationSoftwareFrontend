@@ -56,6 +56,7 @@
         "tryAgainLink2": " <a href='https://company-organization-software-coral.vercel.app/resetpassword'>Tekrar mail göndermek için buraya tıklayın</a>.",
         "notDeleted":   "Kullanıcı Silinemedi! Lütfen tekrar deneyin.",
         "notAdded": "Kullanıcı eklenemedi! Lütfen tekrar deneyin.",
+        "notEdited": "Kullanıcı düzenlenemedi! Lütfen tekrar deneyin.",
         "stringEmpty": "Metin kutularından biri boş olabilir!",
         "emailError": "Lütfen geçerli bir e-posta adresi girin"
       },
@@ -85,8 +86,9 @@
         "filters": "Filtre",
         "menu": "Menü",
         "search": "Arama yap...",
-        "addSuccessful": "Kullanıcı eklendi!",
-        "successfulMessage": "Kullanıcı silindi!"
+        "addSuccessful": "Kullanıcı başarıyla eklendi!",
+        "editSuccessful": "Kullanıcı başarıyla düzenlendi!",
+        "successfulMessage": "Kullanıcı başarıyla silindi!"
     },
     "homepage":{
       "homepage": "Anasayfa",

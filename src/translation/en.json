@@ -55,6 +55,7 @@
         "tryAgainLink2": " <a href='https://company-organization-software-coral.vercel.app/resetpassword'>Click here to send mail again.</a>.",
         "notDeleted":   "User could not be deleted! Please try again.",
         "notAdded": "User could not be added! Please try again.",
+        "notEdited": "User could not edited! Please tyr again.",
         "stringEmpty": "Strings are empty!",
         "emailError": "Email does not meet the criteria."
       },
@@ -84,8 +85,9 @@
         "filters": "Filters",
         "menu": "Menu",
         "search": "Search...",
-        "addSuccessful": "User added",
-        "successfulMessage": "User Deleted"
+        "addSuccessful": "User succesfully added!",
+        "editSuccessful": "Used succesfully edited!",
+        "successfulMessage": "User succesfully deleted!"
     },
     "homepage":{
       "homepage": "Homepage",
