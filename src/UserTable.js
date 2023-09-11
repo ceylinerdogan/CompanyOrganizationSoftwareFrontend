@@ -304,6 +304,7 @@ export default function UserTable() {
 
   const Logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('id');
     navigate2('/');
     setLoggedIn(false);
   }
