@@ -363,7 +363,7 @@ export default function UserTable() {
 
               position: 'absolute',
               height: 700,
-              width: '62%',
+              width: '65%',
               flexGrow: 1,
             }}>
             <div style={{
