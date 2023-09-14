@@ -461,6 +461,7 @@ export default function UserTable() {
 
               pageSizeOptions={[5, 10, 20, 30, 40, 50, 100]}
               autoHeight
+              checkboxSelection
             />
 
             <Dialog open={openDialog} onClose={handleCloseDialog}>
