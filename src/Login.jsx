@@ -34,7 +34,7 @@ const Login = () => {
     }
 
     Notification.requestPermission((result) => {
-        //console.log(result);
+        console.log(result);
     });
 
 

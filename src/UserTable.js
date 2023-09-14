@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import axios from 'axios';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { TextField, MenuItem, Select, InputLabel, FormControl, Drawer, Button } from '@mui/material';
+import { TextField, MenuItem, Select, InputLabel, FormControl, Drawer, Button, TablePagination } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -22,8 +22,6 @@ import DialogContent from '@mui/material/DialogContent';
 import { useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useTranslation } from 'react-i18next';
-
-
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -53,10 +51,7 @@ export default function UserTable() {
   const [deleteId, setDeleteId] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [loggedIn, setLoggedIn] = useState(true);
-  //Bu errorlar çeviri dosyasında ona göre yazılacak ayrıca 
-  //obje tanımlamaya gerek yok toggle yapılacak setNewPassword gibi
-  //const [nameSurnameEmailError, setNameSurnameEmailError] = useState(false);
-  //const [roleCompanyDepartmentError, setRoleCompanyDepartmentError] = useState(false);
+
   const userRole = localStorage.getItem('role');
   const token = localStorage.getItem('token');
   const navigate1 = useNavigate();
@@ -71,6 +66,7 @@ export default function UserTable() {
   }
   const selectedRoleId = roleMapping[role];
   const selectedDepartmentId = departmentMapping[departmentFilter];
+
 
   // const getUsersById = (id) => {
   //   const link = "https://delta.eu-west-1.elasticbeanstalk.com/users/" + id;
@@ -96,19 +92,19 @@ export default function UserTable() {
   }
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 90 },
-    { field: 'name', headerName: 'Name', width: 130 },
-    { field: 'surname', headerName: 'Surname', width: 130 },
-    { field: 'email', headerName: 'Email', width: 200 },
-    { field: 'role', headerName: 'Role', width: 90, valueGetter: (params) => `${params.row.role.name} ` },
-    { field: 'company', headerName: 'Company', width: 220, valueGetter: (params) => `${params.row.company.name} ` },
-    { field: 'department', headerName: 'Department', width: 180, valueGetter: (params) => `${params.row.department.name} ` },
+    { field: 'id', headerName: t('usertable.id'), width: 90 },
+    { field: 'name', headerName: t('usertable.name'), width: 130 },
+    { field: 'surname', headerName: t('usertable.surname'), width: 130 },
+    { field: 'email', headerName: t('usertable.email'), width: 200 },
+    { field: 'role', headerName: t('usertable.role'), width: 90, valueGetter: (params) => `${params.row.role.name} ` },
+    { field: 'company', headerName: t('usertable.company'), width: 220, valueGetter: (params) => `${params.row.company.name} ` },
+    { field: 'department', headerName: t('usertable.department'), width: 180, valueGetter: (params) => `${params.row.department.name} ` },
 
   ];
 
   if (userRole === '1') {
     columns.push({
-      field: 'actions', headerName: 'Actions', width: 100, sortable: false, renderCell: (params) => (
+      field: 'actions', headerName: t('usertable.actions'), width: 100, sortable: false, renderCell: (params) => (
         <div>
           <IconButton
             onClick={() => handleEditClick(params.row.id)}
@@ -145,23 +141,23 @@ export default function UserTable() {
         setFilteredRows(updatedRows);
         handleCloseDialog();
         setSuccessSnackbarOpen(true);
-        
+
       })
       .catch((Error) => {
         console.error('Delete Failed', Error);
         handleCloseDialog();
         setErrorSnackbarOpen(true);
-        
+
       });
   };
 
   const handleClose = (reason) => {
     if (reason === 'clickaway') {
-        return;
+      return;
     }
     setSuccessSnackbarOpen(false);
     setErrorSnackbarOpen(false);
-};
+  };
 
 
   const handleCloseDialog = () => {
@@ -286,6 +282,9 @@ export default function UserTable() {
         const responseData = Response.data.data.content;
         setRows(responseData);
         setFilteredRows(responseData);
+        const count = Response.data.data.content.length;
+
+        console.log(count);
       })
       .catch((Error) => {
         console.error("Error fetching data:", Error);
@@ -308,6 +307,20 @@ export default function UserTable() {
     navigate2('/');
     setLoggedIn(false);
   }
+
+
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
 
   if (token == null) {
     navigate2('/');
@@ -347,34 +360,17 @@ export default function UserTable() {
 
           <div className='table'
             style={{
-              backgroundColor: 'rgb(50, 68, 14)',
+
               position: 'absolute',
-              height: 600,
-              width: '70%',
+              height: 700,
+              width: '62%',
               flexGrow: 1,
             }}>
-            <DataGrid
-              style={{
-                color: 'whitesmoke',
-                fontFamily: 'Arial, Helvetica, sans-serif',
-                border: 'none'
-              }}
-              rows={filteredRows}
-              columns={columns}
-              initialState={{
-                pagination: {
-                  paginationModel: { page: 0, pageSize: 5 },
-                  style: { color: 'whitesmoke' }
-
-                },
-              }}
-              pageSizeOptions={[5, 10, 20, 30, 40, 50, 100]}
-              checkboxSelection
-            />
-
-            <div className='searchContainer'
-              style={{ position: 'absolute', bottom: -3, padding: '10px' }}>
-
+            <div style={{
+              display: 'flex',  
+              alignItems: 'center',  
+              justifyContent: 'flex-end', 
+            }}>
               <TextField type="text"
                 placeholder={t('usertable.search')}
                 value={searchItem}
@@ -397,15 +393,75 @@ export default function UserTable() {
                     </>
                   )
                 }}
-                style={{ position: 'relative', backgroundColor: 'whitesmoke', opacity: '0.5', border: 'none', borderRadius: '5px' }}
+                style={{
+                  position: 'relative', backgroundColor: 'whitesmoke', bottom: '3px',
+                  border: 'none', borderRadius: '5px'
+                }}
               />
-              <IconButton onClick={() => setIsFilterOpen(true)} style={{ color: 'whitesmoke' }}>
+              <IconButton onClick={() => setIsFilterOpen(true)} style={{ color: 'whitesmoke', backgroundColor: 'rgb(50, 68, 14)', marginRight: '10px', marginLeft: '10px', bottom: '2px' }}>
                 <FilterListIcon />
               </IconButton>
-              <Button startIcon={<AddIcon />} style={{ color: 'whitesmoke' }} onClick={() => setIsAddOpen(true)}>
+              <Button startIcon={<AddIcon />} style={{ color: 'whitesmoke', backgroundColor: 'rgb(50, 68, 14)' }} onClick={() => setIsAddOpen(true)}>
                 {t('usertable.addUser')}
               </Button>
             </div>
+
+            {/* <DataGrid
+              style={{
+                color: 'whitesmoke',
+                fontFamily: 'Arial, Helvetica, sans-serif',
+                border: 'none',
+                backgroundColor: 'rgb(50, 68, 14)'
+              }}
+              rows={filteredRows}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: { pageSize: 5 },
+                },
+              }}
+              checkboxSelection
+              autoHeight
+              // components={{
+
+              //   Pagination: (props) => (
+              //     <TablePagination
+              //       sx={{color:'whitesmoke'}}
+              //       pageSizeOptions={[5, 10, 20, 30, 40, 50, 100]}
+              //       rowsPerPageOptions={[10, 50, { value: -1, label: 'All' }]}
+              //       labelRowsPerPage= {t('usertable.rowsPerPage')}  
+              //       paginationMode="server"
+              //       onPageChange={(params) => {
+              //         console.log("===params===",params);
+              //       }}
+              //       labelDisplayedRows={({ from, to, count })=>
+                    
+              //      `${1}-${5} of ${14}`
+              //     }
+                  
+              //     />
+              //   ),
+              // }}
+            /> */}
+            <DataGrid
+              sx={{
+                backgroundColor: "rgb(50, 68, 14)",
+                color: "whitesmoke",
+                fontWeight: 100,
+                fontFamily: 'Arial, Helvetica, sans-serif',
+                border: 'none',
+              }}
+              rows={filteredRows}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 },
+                },
+              }}
+
+              pageSizeOptions={[5, 10, 20, 30, 40, 50, 100]}
+              autoHeight
+            />
 
             <Dialog open={openDialog} onClose={handleCloseDialog}>
               <DialogTitle>{t('usertable.confirmDelete')}</DialogTitle>
@@ -533,9 +589,9 @@ export default function UserTable() {
             </Drawer>
 
 
-            <Drawer anchor="bottom" open={isFilterOpen} onClose={() => setIsFilterOpen(false)}>
+            <Drawer anchor="right" open={isFilterOpen} onClose={() => setIsFilterOpen(false)}>
               <h2 style={{ fontFamily: 'Arial, Helvetica, sans-serif', padding: '10px' }}>{t('usertable.filters')}</h2>
-              <div style={{ width: 500, padding: '20px', marginBottom: '30px', display: 'flex', flexDirection: 'column' }} className='filterContainer'>
+              <div style={{ width: 300, padding: '20px', marginBottom: '30px', display: 'flex', flexDirection: 'column' }} className='filterContainer'>
                 <FormControl style={{ width: '100%', backgroundColor: 'whitesmoke' }} >
                   <InputLabel>{t('usertable.company')}</InputLabel>
                   <Select value={companyFilter} onChange={(e) => setCompanyFilter(e.target.value)}>
@@ -547,7 +603,7 @@ export default function UserTable() {
                   </Select>
                 </FormControl>
               </div>
-              <div style={{ width: 500, marginBottom: '80px', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ width: 300, marginBottom: '80px', display: 'flex', flexDirection: 'column' }}>
                 <FormControl style={{ width: '100%', backgroundColor: 'whitesmoke', left: '20px' }} >
                   <InputLabel>{t('usertable.department')}</InputLabel>
                   <Select value={departmentFilter} onChange={(e) => setDepartmentFilter(e.target.value)}>
@@ -640,14 +696,14 @@ export default function UserTable() {
               </div>
               <div style={{ padding: '20px', display: 'flex', justifyContent: 'flex-start' }}>
                 <Button onClick={() => { setCompanyFilter(''); setDepartmentFilter(''); setRole(''); setName(''); setSurname(''); setEmail('') }} style={{ marginRight: '10px' }}>
-                {t('usertable.clear')}
+                  {t('usertable.clear')}
                 </Button>
                 <Button onClick={() => setIsAddOpen(false)} style={{ marginRight: '10px' }}>
-                {t('usertable.cancel')}
+                  {t('usertable.cancel')}
                 </Button>
                 <div>
                   <Button onClick={handleAddClick} color="primary" type='submit' className="addBtn">
-                  {t('usertable.add')}
+                    {t('usertable.add')}
                   </Button>
                   <Snackbar open={successSnackbarOpen}
                     autoHideDuration={3000}
@@ -664,7 +720,7 @@ export default function UserTable() {
                     onClose={handleClear}
                     anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
                     <Alert onClose={handleClear} severity="error" sx={{ width: '200%' }}>
-                    {t('snackbarErrors.stringEmpty')}
+                      {t('snackbarErrors.stringEmpty')}
                     </Alert>
                   </Snackbar>
                   <Snackbar open={emailError}
@@ -674,7 +730,7 @@ export default function UserTable() {
                     <Alert onClose={handleClear}
                       severity="error"
                       sx={{ width: '200%' }}>
-                        {t('snackbarErrors.emailError')}
+                      {t('snackbarErrors.emailError')}
                     </Alert>
                   </Snackbar>
                 </div>
@@ -686,4 +742,3 @@ export default function UserTable() {
     );
   }
 }
-
