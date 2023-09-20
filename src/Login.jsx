@@ -1,4 +1,4 @@
-import { Button, TextField } from '@mui/material';
+import { Button, OutlinedInput, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "./Login.css"
@@ -7,6 +7,12 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { useTranslation } from 'react-i18next';
 import i18n from './i18n';
+import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import IconButton from '@mui/material/IconButton';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -27,6 +33,13 @@ const Login = () => {
     // const navigate3 = useNavigate();
     // const navigate4 = useNavigate();
     const navigate5 = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
 
     const emailCheck = (email) => {
         const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -118,14 +131,47 @@ const Login = () => {
                     </div>
                     <div>
                         <label className="labelPass" htmlFor="password">{t('login.passwordLabel')}</label>
-                        <TextField
-                            type="password"
+                        {/* <TextField
                             id="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="********"
                             className='passwordinput'
-                        />
+                            type={showPassword ? 'text' : 'password'}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                        edge="end"
+                                    >
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                        /> */}
+                        <FormControl sx={{ m: 1, width: '25ch' }} variant="filled">
+                        
+                            <OutlinedInput
+                            style={{right: '130px'}}
+                                className='passwordinput'
+                                id="filled-adornment-password"
+                                type={showPassword ? 'text' : 'password'}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            edge="end"
+                                        >
+                                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                            />
+                        </FormControl>
                     </div>
 
                     <div>
