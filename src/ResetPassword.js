@@ -35,7 +35,7 @@ const ResetPassword = () =>{
             email: email,
         }
         
-        axios.post("https://delta.eu-west-1.elasticbeanstalk.com/api/auth/reset-password",resetData)
+        axios.post("https://delta.eu-west-1.elasticbeanstalk.com/api/auth/forgot-password",resetData)
         .then(Response=>{
             console.log(Response.data);
             if(Response.data.message ==='Reset password mail send'){
