@@ -24,31 +24,35 @@ function Homepage() {
     const handleClickUserTable = () => {
         navigate2('/usertable');
     };
+
     const Logout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('id');
         navigate1('/');
         setLoggedIn(false);
-
     }
 
-
     useEffect(() => {
-        setAccessToken(token);
-        setId(ID);
-        const link = "https://delta.eu-west-1.elasticbeanstalk.com/users/" + ID;
+        const token = localStorage.getItem('token');  // Retrieve the token from localStorage
+        if (!token) {
+            console.error("No token found, redirecting to login page.");
+            navigate2('/');  // If no token, redirect to login
+            return;
+        }
+        const link = "https://delta1.eu-west-1.elasticbeanstalk.com/api/user/profile";
         axios.get(link, {
-            headers: { Authorization: token }
+            headers: {
+                Authorization: `Bearer ${token}`  // Include Bearer token in the Authorization header
+            }
         })
             .then((Response) => {
                 console.log("user found", Response.data);
-                setUserData(Response.data);
+                setUserData(Response.data);  // Set user data directly from the response
             })
             .catch((Error) => {
                 console.error('user not found', Error);
             });
-    },
-        []);
+    }, [navigate2]);
 
     if (token == null) {
         navigate1('/');
@@ -61,7 +65,7 @@ function Homepage() {
                 </Button>
                 <Drawer anchor="left" open={isMenuOpen} onClose={() => setIsMenuOpen(false)}>
                     <h2 style={{ fontFamily: 'Arial, Helvetica, sans-serif', padding: '10px' }}>{t('homepage.menu')}</h2>
-                    <div >
+                    <div>
                         <Button style={{ marginRight: '50px', marginLeft: '10px', color: 'black' }}>
                             {t('homepage.homepage')}
                         </Button>
@@ -81,38 +85,32 @@ function Homepage() {
                                 <p>{t('homepage.pleaseLogin')}</p>
                             )}
                         </div>
-
                     </div>
                 </Drawer>
                 <div style={{
                     display: 'flex',
                     justifyContent: 'center', alignItems: 'center', minHeight: '100vh'
                 }}>
-
                     {userData ? (
                         <div style={{
                             backgroundColor: 'rgb(50, 68, 14)', color: 'whitesmoke',
-                            width: '400px', height: '275px',
-                            fontFamily: 'Arial, Helvetica, sans-serif'
-                        }} >
+                            width: '400px', height: '325px',
+                            fontFamily: 'Arial, Helvetica, sans-serif', padding: '20px'
+                        }}>
                             <h1>{t('homepage.userInformations')}</h1>
-                            <p>{t('homepage.name')} {userData.data.name}</p>
-                            <p>{t('homepage.surname')} {userData.data.surname}</p>
-                            <p>{t('homepage.company')} {userData.data.company.name}</p>
-                            <p>{t('homepage.department')} {userData.data.department.name}</p>
-                            <p>{t('homepage.role')} {userData.data.role.name}</p>
+                            <p>{t('homepage.name')} {userData.firstName}</p>
+                            <p>{t('homepage.surname')} {userData.lastName}</p>
+                            <p>{t('homepage.company')} {userData.company}</p>
+                            <p>{t('homepage.department')} {userData.department}</p>
+                            <p>{t('homepage.role')} {userData.role}</p>
                         </div>
                     ) : (
                         <p>{t('homepage.dataLoading')}</p>
                     )}
                 </div>
             </div>
-
-
         );
     }
-
-
 }
 
 export default Homepage;

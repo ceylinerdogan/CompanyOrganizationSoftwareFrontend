@@ -6,13 +6,10 @@ import axios from 'axios';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { useTranslation } from 'react-i18next';
-import i18n from './i18n';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -28,11 +25,7 @@ const Login = () => {
     const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
     const [emailError, setEmailError] = useState(false);
     const [loggedIn, setLoggedIn] = useState(true);
-    const navigate1 = useNavigate();
-    const navigate2 = useNavigate();
-    // const navigate3 = useNavigate();
-    // const navigate4 = useNavigate();
-    const navigate5 = useNavigate();
+    const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -45,11 +38,6 @@ const Login = () => {
         const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return emailPattern.test(email);
     }
-
-    Notification.requestPermission((result) => {
-        console.log(result);
-    });
-
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -69,18 +57,21 @@ const Login = () => {
             email: email,
             password: password,
         };
-        axios.post("https://delta.eu-west-1.elasticbeanstalk.com/auth/login", loginData)
-            .then((Response) => {
-                console.log(Response.data);
-                setSuccessSnackbarOpen(true);
-                navigate5('/homepage');
 
-                localStorage.setItem('token', Response.data.data.accessToken);
-                localStorage.setItem('role', Response.data.data.user.role.id);
-                localStorage.setItem('id', Response.data.data.user.id);
+        axios.post("https://delta1.eu-west-1.elasticbeanstalk.com/api/auth/login", loginData)
+            .then((response) => {
+                console.log(response.data);
+                setSuccessSnackbarOpen(true);
+                navigate('/homepage');
+
+                localStorage.setItem('token', response.data.token);
+
+                // Remove or adjust these if your backend does not return role or ID
+                // localStorage.setItem('role', response.data.role);
+                // localStorage.setItem('id', response.data.id);
             })
-            .catch((Error) => {
-                console.error("Error login:", Error);
+            .catch((error) => {
+                console.error("Error during login:", error);
                 setErrorSnackbarOpen(true);
             });
     };
@@ -95,22 +86,12 @@ const Login = () => {
     };
 
     function handleClickResetPass(event) {
-        navigate1('/resetpassword');
+        navigate('/resetpassword');
     }
 
     function handleClickActivateUser(event) {
-        navigate2('/activateuser');
+        navigate('/activateuser');
     }
-
-    // function handleClicksSetPass(event){
-    //      navigate3('/setpassword');
-    // }
-
-    // function handleClickSetNewPass(event){
-    //       navigate4('/setnewpassword');
-    // }
-
-
 
     return (
         <div className='container'>
@@ -131,7 +112,7 @@ const Login = () => {
                     </div>
                     <div>
                         <label className="labelPass" htmlFor="password">{t('login.passwordLabel')}</label>
-                        {/* <TextField
+                        <TextField
                             id="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -150,34 +131,12 @@ const Login = () => {
                                     </IconButton>
                                 </InputAdornment>
                             }
-                        /> */}
-                        <FormControl sx={{ m: 1, width: '25ch' }} variant="filled">
-                        
-                            <OutlinedInput
-                            style={{right: '130px'}}
-                                className='passwordinput'
-                                id="filled-adornment-password"
-                                type={showPassword ? 'text' : 'password'}
-                                endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={handleClickShowPassword}
-                                            onMouseDown={handleMouseDownPassword}
-                                            edge="end"
-                                        >
-                                            {showPassword ? <Visibility /> : <VisibilityOff />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                }
-                            />
-                        </FormControl>
+                        />
                     </div>
 
                     <div>
                         <Button
                             className="signInbtn"
-                            onSubmit={handleSubmit}
                             type="submit"
                             style={{
                                 padding: '10px 180px',
@@ -235,14 +194,9 @@ const Login = () => {
                             }}
                         >{t('login.activateAccountButton')}</Button>
                     </div>
-                    {/* <div>
-                        <Button className='setpass' onClick={handleClicksSetPass}>setpass</Button>
-                        <Button  className='setnewpass'onClick={handleClickSetNewPass}>setnewpass</Button>
-                    </div>   */}
                 </form>
             </div>
         </div>
-
     );
 };
 

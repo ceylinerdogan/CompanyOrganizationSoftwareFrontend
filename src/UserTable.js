@@ -93,35 +93,33 @@ export default function UserTable() {
 
   const columns = [
     { field: 'id', headerName: t('usertable.id'), width: 90 },
-    { field: 'name', headerName: t('usertable.name'), width: 130 },
-    { field: 'surname', headerName: t('usertable.surname'), width: 130 },
+    { field: 'firstName', headerName: t('usertable.name'), width: 130 },
+    { field: 'lastName', headerName: t('usertable.surname'), width: 130 },
     { field: 'email', headerName: t('usertable.email'), width: 200 },
-    { field: 'role', headerName: t('usertable.role'), width: 90, valueGetter: (params) => `${params.row.role.name} ` },
-    { field: 'company', headerName: t('usertable.company'), width: 220, valueGetter: (params) => `${params.row.company.name} ` },
-    { field: 'department', headerName: t('usertable.department'), width: 180, valueGetter: (params) => `${params.row.department.name} ` },
-
+    { field: 'role', headerName: t('usertable.role'), width: 100 },
+    { field: 'company', headerName: t('usertable.company'), width: 250 },
+    { field: 'department', headerName: t('usertable.department'), width: 180 },
   ];
-
+  
+  // Add conditional rendering for the "actions" column if the user is an admin
   if (userRole === '1') {
     columns.push({
-      field: 'actions', headerName: t('usertable.actions'), width: 100, sortable: false, renderCell: (params) => (
+      field: 'actions',
+      headerName: t('usertable.actions'),
+      width: 100,
+      sortable: false,
+      renderCell: (params) => (
         <div>
-          <IconButton
-            onClick={() => handleEditClick(params.row.id)}
-            style={{ color: 'whitesmoke' }}
-          >
+          <IconButton onClick={() => handleEditClick(params.row.id)} style={{ color: 'whitesmoke' }}>
             <EditIcon />
           </IconButton>
-          <IconButton
-            onClick={() => handleDeleteClick(params.row.id)}
-            style={{ color: 'whitesmoke' }}
-          >
+          <IconButton onClick={() => handleDeleteClick(params.row.id)} style={{ color: 'whitesmoke' }}>
             <DeleteIcon />
           </IconButton>
         </div>
-      )
-    })
-  };
+      ),
+    });
+  }
 
   const handleDeleteClick = (id) => {
     setDeleteId(id);
@@ -129,10 +127,19 @@ export default function UserTable() {
   };
 
   const handleConfirmDelete = () => {
+    const token = localStorage.getItem('token');  // Retrieve the token from localStorage
+    if (!token) {
+      console.error("No token found, redirecting to login page.");
+      navigate2('/');  // If no token, redirect to login
+      return;
+    }
+  
     console.log("delete", deleteId);
-    const link = "https://delta.eu-west-1.elasticbeanstalk.com/users/" + deleteId;
+    const link = "https://delta1.eu-west-1.elasticbeanstalk.com/api/user/delete/" + deleteId;
     axios.delete(link, {
-      headers: { Authorization: token }
+      headers: {
+        Authorization: `Bearer ${token}`  // Include Bearer token in the Authorization header
+      }    
     })
       .then((Response) => {
         console.log("Row deleted", Response.data);
@@ -171,6 +178,12 @@ export default function UserTable() {
 
 
   const handleEditSubmit = (id) => {
+    const token = localStorage.getItem('token');  // Retrieve the token from localStorage
+    if (!token) {
+      console.error("No token found, redirecting to login page.");
+      navigate2('/');  // If no token, redirect to login
+      return;
+    }
 
     const editData = {
       name: name,
@@ -182,9 +195,11 @@ export default function UserTable() {
 
     console.log("edit", id);
     console.log("edit data", editData);
-    const link = "https://delta.eu-west-1.elasticbeanstalk.com/users/" + id;
+    const link = "https://delta1.eu-west-1.elasticbeanstalk.com/api/user/update/" + id;
     axios.put(link, editData, {
-      headers: { Authorization: token }
+      headers: {
+        Authorization: `Bearer ${token}`  // Include Bearer token in the Authorization header
+      }
     })
       .then((Response) => {
         console.log("Row Edited", Response.data);
@@ -228,6 +243,13 @@ export default function UserTable() {
   };
 
   const handleAddClick = () => {
+    const token = localStorage.getItem('token');  // Retrieve the token from localStorage
+    if (!token) {
+      console.error("No token found, redirecting to login page.");
+      navigate2('/');  // If no token, redirect to login
+      return;
+    }
+  
     if (!emailCheck(email)) {
       console.log("Email is not valid. Please enter a valid email.");
       setEmailError(true);
@@ -248,8 +270,10 @@ export default function UserTable() {
     console.log(addData);
     console.log(token);
     setAccessToken(token);
-    axios.post("https://delta.eu-west-1.elasticbeanstalk.com/users/create", addData, {
-      headers: { Authorization: token }
+    axios.post("https://delta1.eu-west-1.elasticbeanstalk.com/api/user/add-user", addData, {
+      headers: {
+        Authorization: `Bearer ${token}`  // Include Bearer token in the Authorization header
+      }
     })
       .then((Response) => {
         console.log(Response.data);
@@ -272,24 +296,28 @@ export default function UserTable() {
     setEmailError(false);
   };
   const getUsers = () => {
-    setAccessToken(token);
-    axios.get("https://delta.eu-west-1.elasticbeanstalk.com/users/all", {
-      params: { pageSize: 100 },
-      headers: { Authorization: token }
+    const token = localStorage.getItem('token');  // Retrieve the token from localStorage
+    if (!token) {
+      console.error("No token found, redirecting to login page.");
+      navigate2('/');  // If no token, redirect to login
+      return;
+    }
+  
+    axios.get("https://delta1.eu-west-1.elasticbeanstalk.com/api/user/all", {
+      headers: {
+        Authorization: `Bearer ${token}`  // Include Bearer token in the Authorization header
+      }
     })
       .then((Response) => {
         console.log(Response.data);
-        const responseData = Response.data.data.content;
-        setRows(responseData);
+        const responseData = Response.data.content;  // Get the 'content' array
+        setRows(responseData);  // Set the rows with the 'content' data
         setFilteredRows(responseData);
-        const count = Response.data.data.content.length;
-
-        console.log(count);
+        console.log(`Total number of users: ${responseData.length}`);
       })
       .catch((Error) => {
         console.error("Error fetching data:", Error);
       });
-
   };
 
   useEffect(() => {

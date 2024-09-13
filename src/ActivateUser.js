@@ -38,16 +38,15 @@ const ActivateUser = () =>{
             email: email
         }
         
-        axios.post("https://delta.eu-west-1.elasticbeanstalk.com/auth/activateAccount",activateData)
+        axios.post("https://delta1.eu-west-1.elasticbeanstalk.com/api/auth/activate-user",activateData)
         .then(response=>{
-            console.log(response.data);
-            if(response.data.message ==='Activation mail send'){
+            if(response.status === 200){
                 setSuccessSnackbarOpen(true);
             }
         })
         .catch(Error=>{
             console.error("Error activating user:",Error);
-            if(Error.response.data.message === 'User already activated'){
+            if(Error.response.message === 'User already activated'){
                 setEmailUsedBeforeError(true);
             }
             setErrorSnackbarOpen(true);

@@ -49,12 +49,11 @@ const SetNewPassword = () =>{
         }
 
         const setpass={
-            password: password,
-            token: token,
+            password: password
         }
         console.log(password);
         console.log(token);
-        axios.post("https://delta.eu-west-1.elasticbeanstalk.com/auth/setNewPassword",setpass)
+        axios.post("https://delta1.eu-west-1.elasticbeanstalk.com/api/auth/reset-password/${token}",setpass)
         .then(Response=>{
             console.log(Response.data);
             setSuccessSnackbarOpen(true);
