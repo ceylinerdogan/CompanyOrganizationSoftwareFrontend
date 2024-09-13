@@ -40,7 +40,11 @@ const ActivateUser = () =>{
         
         axios.post("https://delta1.eu-west-1.elasticbeanstalk.com/api/auth/activate-user",activateData)
         .then(response=>{
+            console.log(response);
             if(response.status === 200){
+                const activationToken = response.data.token;
+                console.log(activationToken);
+                localStorage.setItem('activationToken', activationToken); 
                 setSuccessSnackbarOpen(true);
             }
         })
@@ -51,6 +55,8 @@ const ActivateUser = () =>{
             }
             setErrorSnackbarOpen(true);
         })
+       
+
     };
 
     const handleClose=(event,reason)=>{

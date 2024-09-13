@@ -35,16 +35,19 @@ const ResetPassword = () =>{
             email: email,
         }
         
-        axios.post("https://delta.eu-west-1.elasticbeanstalk.com/api/auth/forgot-password",resetData)
-        .then(Response=>{
-            console.log(Response.data);
-            if(Response.data.message ==='Reset password mail send'){
+        axios.post("https://delta1.eu-west-1.elasticbeanstalk.com/api/auth/forgot-password",resetData)
+        .then(response=>{
+            console.log(response);
+            if(response.status === 200){
+                const forgotPasswordToken = response.data.token;
+                console.log(forgotPasswordToken);
+                localStorage.setItem('forgotPasswordToken', forgotPasswordToken); 
                 setSuccessSnackbarOpen(true);
             }
         })
         .catch(Error=>{
             console.error("Error password reset:",Error);
-            if(Error.response.data.message === 'User not found'){
+            if(Error.status === 404){
                 setUserNotFoundError(true);
             }
             setErrorSnackbarOpen(true);

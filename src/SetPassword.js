@@ -26,17 +26,25 @@ const SetPassword = () =>{
     const[length,setLength]=useState(false);
     const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
     const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
-    
 
     const location=useLocation();
-    const token= new URLSearchParams(location.search).get('token')
+
+    const token = localStorage.getItem('activationToken');
+
     
     const handleSetPassword=()=>{
+        if (!token) {
+            console.error("Token not found");
+            setErrorSnackbarOpen(true);
+            return;
+        }
+
         if (password.length === 0) {
             console.log("Password is empty. Please enter a valid password.");
             setErrorSnackbarOpen(true);
             return;
         }
+       
 
         const Length = new RegExp('^(?=.{8,32}$)');
         const upperCase = new RegExp('(?=.*[A-Z])');

@@ -28,8 +28,15 @@ const SetNewPassword = () =>{
     const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
 
     const location1=useLocation();
-    const token= new URLSearchParams(location1.search).get('token')
+    
+    const token = localStorage.getItem('forgotPasswordToken');
     const handleSetNewPassword=()=>{
+        if (!token) {
+            console.error("Token not found");
+            setErrorSnackbarOpen(true);
+            return;
+        }
+
         if (password.length === 0) {
             console.log("Password is empty. Please enter a valid password.");
             setErrorSnackbarOpen(true);
