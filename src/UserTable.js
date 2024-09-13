@@ -56,17 +56,22 @@ export default function UserTable() {
   const token = localStorage.getItem('token');
   const navigate1 = useNavigate();
   const navigate2 = useNavigate();
-  const roleMapping = {
-    "Admin": 1,
-    "Manager": 2
-  }
-  const departmentMapping = {
-    "Genel Müdürlük": 1,
-    "Yazılım Geliştirme": 2
-  }
-  const selectedRoleId = roleMapping[role];
-  const selectedDepartmentId = departmentMapping[departmentFilter];
 
+
+  const roles = [
+    { id: 1, name: 'ADMIN' },
+    { id: 2, name: 'MANAGER' },
+    { id: 3, name: 'USER' }
+  ];
+
+  const companies = [
+    { id: 1, name: 'Delta Akıllı Teknolojiler A.Ş.' }
+  ];
+
+  const departments = [
+    { id: 1, name: 'Genel Müdürlük' },
+    { id: 2, name: 'Yazılım Geliştirme' }
+  ];
 
   // const getUsersById = (id) => {
   //   const link = "https://delta.eu-west-1.elasticbeanstalk.com/users/" + id;
@@ -84,8 +89,6 @@ export default function UserTable() {
   //     });
   // };
 
-
-
   const emailCheck = (email) => {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailPattern.test(email);
@@ -99,11 +102,7 @@ export default function UserTable() {
     { field: 'role', headerName: t('usertable.role'), width: 100 },
     { field: 'company', headerName: t('usertable.company'), width: 250 },
     { field: 'department', headerName: t('usertable.department'), width: 180 },
-  ];
-  
-  // Add conditional rendering for the "actions" column if the user is an admin
-  if (userRole === '1') {
-    columns.push({
+    {
       field: 'actions',
       headerName: t('usertable.actions'),
       width: 100,
@@ -117,9 +116,29 @@ export default function UserTable() {
             <DeleteIcon />
           </IconButton>
         </div>
-      ),
-    });
-  }
+      )
+    }
+  ];
+
+  // Add conditional rendering for the "actions" column if the user is an admin
+  // if (userRole === '1') {
+  //   columns.push({
+  //     field: 'actions',
+  //     headerName: t('usertable.actions'),
+  //     width: 100,
+  //     sortable: false,
+  //     renderCell: (params) => (
+  //       <div>
+  //         <IconButton onClick={() => handleEditClick(params.row.id)} style={{ color: 'whitesmoke' }}>
+  //           <EditIcon />
+  //         </IconButton>
+  //         <IconButton onClick={() => handleDeleteClick(params.row.id)} style={{ color: 'whitesmoke' }}>
+  //           <DeleteIcon />
+  //         </IconButton>
+  //       </div>
+  //     ),
+  //   });
+  // }
 
   const handleDeleteClick = (id) => {
     setDeleteId(id);
@@ -133,13 +152,13 @@ export default function UserTable() {
       navigate2('/');  // If no token, redirect to login
       return;
     }
-  
+
     console.log("delete", deleteId);
     const link = "https://delta1.eu-west-1.elasticbeanstalk.com/api/user/delete/" + deleteId;
     axios.delete(link, {
       headers: {
         Authorization: `Bearer ${token}`  // Include Bearer token in the Authorization header
-      }    
+      }
     })
       .then((Response) => {
         console.log("Row deleted", Response.data);
@@ -186,11 +205,12 @@ export default function UserTable() {
     }
 
     const editData = {
-      name: name,
-      surname: surname,
+      firstName: name,
+      lastName: surname,
       email: email,
-      roleId: selectedRoleId,
-      departmentId: selectedDepartmentId
+      role: role, 
+      department: departmentFilter, 
+      company: companyFilter, 
     }
 
     console.log("edit", id);
@@ -214,32 +234,31 @@ export default function UserTable() {
   };
 
   const handleSearchClick = () => {
-    console.log("Search clicked");
-    console.log("Search item:", searchItem);
-    if (searchItem.trim() === '') {
-      console.log("No search item, setting all rows");
-      setFilteredRows(rows);
-    } else {
-      const filteredRows = rows.filter((row) =>
-        row.name.toLowerCase().includes(searchItem.toLowerCase()) ||
-        row.surname.toLowerCase().includes(searchItem.toLowerCase()) ||
-        row.email.toLowerCase().includes(searchItem.toLowerCase())
-      );
-      console.log("Filtered rows:", filteredRows);
-      setFilteredRows(filteredRows);
-    }
-    setIsFilterOpen(false);
-    console.log("Search complete");
+    const searchValue = searchItem.toLowerCase();
+    const result = rows.filter(row =>
+      row.firstName.toLowerCase().includes(searchValue) ||
+      row.lastName.toLowerCase().includes(searchValue) ||
+      row.email.toLowerCase().includes(searchValue)
+    );
+    setFilteredRows(result);
   };
 
   const handleFilteredClick = () => {
-    const filteredRows = rows.filter((row) =>
-    (row.company.name.toLowerCase().includes(companyFilter.toLowerCase()) &&
-      row.department.name.toLowerCase().includes(departmentFilter.toLowerCase()))
-    );
+    console.log("Company filter:", companyFilter);
+  console.log("Department filter:", departmentFilter);
 
-    setFilteredRows(filteredRows);
-    setIsFilterOpen(false);
+  const filteredRows = rows.filter((row) => {
+    const companyName = row.company?.toLowerCase() || '';
+    const departmentName = row.department?.toLowerCase() || '';
+
+    const companyMatches = !companyFilter || companyName.includes(companyFilter.toLowerCase());
+    const departmentMatches = !departmentFilter || departmentName.includes(departmentFilter.toLowerCase());
+
+    return companyMatches && departmentMatches;
+  });
+
+  setFilteredRows(filteredRows);
+  setIsFilterOpen(false);
   };
 
   const handleAddClick = () => {
@@ -249,7 +268,7 @@ export default function UserTable() {
       navigate2('/');  // If no token, redirect to login
       return;
     }
-  
+
     if (!emailCheck(email)) {
       console.log("Email is not valid. Please enter a valid email.");
       setEmailError(true);
@@ -261,11 +280,12 @@ export default function UserTable() {
       return;
     }
     const addData = {
-      name: name,
-      surname: surname,
+      firstName: name,
+      lastName: surname,
       email: email,
-      roleId: selectedRoleId,
-      departmentId: selectedDepartmentId,
+      role: role, 
+      department: departmentFilter,  
+      company: companyFilter, 
     };
     console.log(addData);
     console.log(token);
@@ -302,7 +322,7 @@ export default function UserTable() {
       navigate2('/');  // If no token, redirect to login
       return;
     }
-  
+
     axios.get("https://delta1.eu-west-1.elasticbeanstalk.com/api/user/all", {
       headers: {
         Authorization: `Bearer ${token}`  // Include Bearer token in the Authorization header
@@ -391,13 +411,13 @@ export default function UserTable() {
 
               position: 'absolute',
               height: 700,
-              width: '65%',
+              width: '70%',
               flexGrow: 1,
             }}>
             <div style={{
-              display: 'flex',  
-              alignItems: 'center',  
-              justifyContent: 'flex-end', 
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
             }}>
               <TextField type="text"
                 placeholder={t('usertable.search')}
@@ -483,7 +503,7 @@ export default function UserTable() {
               columns={columns}
               initialState={{
                 pagination: {
-                  paginationModel: { page: 0, pageSize: 5 },
+                  paginationModel: { page: 0, pageSize: 10 },
                 },
               }}
 
@@ -554,9 +574,9 @@ export default function UserTable() {
                 <FormControl style={{ width: '100%', left: '20px' }} >
                   <InputLabel>{t('usertable.role')}</InputLabel>
                   <Select value={role} onChange={(e) => setRole(e.target.value)}>
-                    {Array.from(new Set(rows.map((row) => row.role.name))).map((role) => (
-                      <MenuItem key={role} value={role}>
-                        {role}
+                    {roles.map((role) => (
+                      <MenuItem key={role.id} value={role.name}>
+                        {role.name}
                       </MenuItem>
                     ))}
                   </Select>
@@ -566,9 +586,9 @@ export default function UserTable() {
                 <FormControl style={{ width: '100%' }} >
                   <InputLabel>{t('usertable.company')}</InputLabel>
                   <Select value={companyFilter} onChange={(e) => setCompanyFilter(e.target.value)}>
-                    {Array.from(new Set(rows.map((row) => row.company.name))).map((company) => (
-                      <MenuItem key={company} value={company}>
-                        {company}
+                    {companies.map((company) => (
+                      <MenuItem key={company.id} value={company.name}>
+                        {company.name}
                       </MenuItem>
                     ))}
                   </Select>
@@ -578,9 +598,9 @@ export default function UserTable() {
                 <FormControl style={{ width: '100%', left: '20px' }} >
                   <InputLabel>{t('usertable.department')}</InputLabel>
                   <Select value={departmentFilter} onChange={(e) => setDepartmentFilter(e.target.value)}>
-                    {Array.from(new Set(rows.map((row) => row.department.name))).map((department) => (
-                      <MenuItem key={department} value={department}>
-                        {department}
+                    {departments.map((department) => (
+                      <MenuItem key={department.id} value={department.name}>
+                        {department.name}
                       </MenuItem>
                     ))}
                   </Select>
@@ -624,9 +644,9 @@ export default function UserTable() {
                 <FormControl style={{ width: '100%', backgroundColor: 'whitesmoke' }} >
                   <InputLabel>{t('usertable.company')}</InputLabel>
                   <Select value={companyFilter} onChange={(e) => setCompanyFilter(e.target.value)}>
-                    {Array.from(new Set(rows.map((row) => row.company.name))).map((company) => (
-                      <MenuItem key={company} value={company}>
-                        {company}
+                    {companies.map((company) => (
+                      <MenuItem key={company.id} value={company.name}>
+                        {company.name}
                       </MenuItem>
                     ))}
                   </Select>
@@ -636,9 +656,9 @@ export default function UserTable() {
                 <FormControl style={{ width: '100%', backgroundColor: 'whitesmoke', left: '20px' }} >
                   <InputLabel>{t('usertable.department')}</InputLabel>
                   <Select value={departmentFilter} onChange={(e) => setDepartmentFilter(e.target.value)}>
-                    {Array.from(new Set(rows.map((row) => row.department.name))).map((department) => (
-                      <MenuItem key={department} value={department}>
-                        {department}
+                    {departments.map((department) => (
+                      <MenuItem key={department.id} value={department.name}>
+                        {department.name}
                       </MenuItem>
                     ))}
                   </Select>
@@ -691,9 +711,9 @@ export default function UserTable() {
                 <FormControl style={{ width: '100%', left: '20px' }} >
                   <InputLabel>{t('usertable.role')}</InputLabel>
                   <Select value={role} onChange={(e) => setRole(e.target.value)}>
-                    {Array.from(new Set(rows.map((row) => row.role.name))).map((role) => (
-                      <MenuItem key={role} value={role}>
-                        {role}
+                    {roles.map((role) => (
+                      <MenuItem key={role.id} value={role.name}>
+                        {role.name}
                       </MenuItem>
                     ))}
                   </Select>
@@ -703,9 +723,9 @@ export default function UserTable() {
                 <FormControl style={{ width: '100%' }} >
                   <InputLabel>{t('usertable.company')}</InputLabel>
                   <Select value={companyFilter} onChange={(e) => setCompanyFilter(e.target.value)}>
-                    {Array.from(new Set(rows.map((row) => row.company.name))).map((company) => (
-                      <MenuItem key={company} value={company}>
-                        {company}
+                    {companies.map((company) => (
+                      <MenuItem key={company.id} value={company.name}>
+                        {company.name}
                       </MenuItem>
                     ))}
                   </Select>
@@ -715,9 +735,9 @@ export default function UserTable() {
                 <FormControl style={{ width: '100%', left: '20px' }} >
                   <InputLabel>{t('usertable.department')}</InputLabel>
                   <Select value={departmentFilter} onChange={(e) => setDepartmentFilter(e.target.value)}>
-                    {Array.from(new Set(rows.map((row) => row.department.name))).map((department) => (
-                      <MenuItem key={department} value={department}>
-                        {department}
+                    {departments.map((department) => (
+                      <MenuItem key={department.id} value={department.name}>
+                        {department.name}
                       </MenuItem>
                     ))}
                   </Select>
