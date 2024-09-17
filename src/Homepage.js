@@ -32,6 +32,12 @@ function Homepage() {
         setLoggedIn(false);
     }
 
+    const roles = [
+        { id: 1, name: 'ADMIN' },
+        { id: 2, name: 'MANAGER' },
+        { id: 3, name: 'USER' }
+    ];
+
     useEffect(() => {
         const token = localStorage.getItem('token');  // Retrieve the token from localStorage
         if (!token) {
@@ -69,10 +75,14 @@ function Homepage() {
                         <Button style={{ marginRight: '50px', marginLeft: '10px', color: 'black' }}>
                             {t('homepage.homepage')}
                         </Button>
+
                         <div>
-                            <Button onClick={handleClickUserTable} style={{ marginRight: '50px', marginLeft: '10px', color: 'black' }} color="primary">
-                                {t('homepage.users')}
-                            </Button>
+                            {userData?.role !== "user" && (
+                                <Button onClick={handleClickUserTable} style={{ marginRight: '50px', marginLeft: '10px', color: 'black' }} color="primary">
+                                    {t('homepage.users')}
+                                </Button>
+                            )}
+
                         </div>
                         <div>
                             {loggedIn ? (
