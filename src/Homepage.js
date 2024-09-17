@@ -77,11 +77,11 @@ function Homepage() {
                         </Button>
 
                         <div>
-                            {roles === 3 && (
-                                <Button onClick={handleClickUserTable} style={{ marginRight: '50px', marginLeft: '10px', color: 'black' }} color="primary">
-                                    {t('homepage.users')}
-                                </Button>
-                            )}
+                        {userData?.role === 'ADMIN' || userData?.role === 'MANAGER' ? (
+                              <Button onClick={handleClickUserTable} style={{ marginRight: '50px', marginLeft: '10px', color: 'black' }} color="primary">
+                              {t('homepage.users')}
+                          </Button>
+                            ) : null}
                         </div>
                         <div>
                             {loggedIn ? (
