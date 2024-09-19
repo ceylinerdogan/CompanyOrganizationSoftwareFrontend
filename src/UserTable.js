@@ -323,7 +323,7 @@ export default function UserTable() {
       return;
     }
 
-    axios.get("https://delta1.eu-west-1.elasticbeanstalk.com/api/user/all", {
+    axios.get("https://delta1.eu-west-1.elasticbeanstalk.com/api/user/users", {
       headers: {
         Authorization: `Bearer ${token}`  // Include Bearer token in the Authorization header
       }
