@@ -104,6 +104,7 @@
     "department": "Department:",
     "role": "Role:",
     "dataLoading": "Data is loading...",
-    "menu": "Menü"
+    "menu": "Menü",
+    "uploadProfile": "Upload Profile Picture"
   }
 }

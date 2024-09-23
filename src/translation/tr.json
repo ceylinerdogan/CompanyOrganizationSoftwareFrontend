@@ -104,6 +104,7 @@
     "department": "Departman:",
     "role": "Rol:",
     "dataLoading": "Veriler yükleniyor...",
-    "menu": "Menü"
+    "menu": "Menü",
+    "uploadProfile": "Profil Fotoğrafı Yükle"
   }
 }

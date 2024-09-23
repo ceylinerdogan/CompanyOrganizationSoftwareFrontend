@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Drawer, Button } from '@mui/material';
+import { Drawer, Button, Avatar, IconButton, Tooltip } from '@mui/material';
+import UploadIcon from '@mui/icons-material/Upload';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useTranslation } from 'react-i18next';
 
@@ -15,6 +16,7 @@ function Homepage() {
     const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [loggedIn, setLoggedIn] = useState(true);
+    const [selectedFile, setSelectedFile] = useState(null);
 
     const ID = localStorage.getItem('id');
     const token = localStorage.getItem('token');
@@ -60,6 +62,54 @@ function Homepage() {
             });
     }, [navigate2]);
 
+    // Handle file selection
+    const handleFileChange = (event) => {
+        setSelectedFile(event.target.files[0]);
+    };
+
+    // Handle profile picture upload
+    const handleFileUpload = () => {
+        if (!selectedFile) {
+            alert("Please select an image to upload");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', selectedFile);  // Append the file to the formData
+
+        axios.post("https://delta1.eu-west-1.elasticbeanstalk.com/api/user/upload-profile-picture", formData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data'  // Ensure the content type is multipart
+            }
+        })
+            .then(response => {
+                console.log("Profile picture uploaded successfully", response.data);
+                alert("Profile picture uploaded successfully!");
+                setUserData(prevState => ({
+                    ...prevState,
+                    profilePicture: response.data.profilePicture  // Update the profile picture after successful upload
+                }));
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error("Error uploading profile picture:", error);
+                alert("Failed to upload profile picture. Please try again.");
+            });
+    };
+    const handleCloseSnackbar = (reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSuccessSnackbarOpen(false);
+        setErrorSnackbarOpen(false);
+    };
+
+    const handleUploadButtonClick = () => {
+        document.getElementById("fileInput").click();
+    };
+
+
     if (token == null) {
         navigate1('/');
     } else {
@@ -77,10 +127,10 @@ function Homepage() {
                         </Button>
 
                         <div>
-                        {userData?.role === 'ADMIN' || userData?.role === 'MANAGER' ? (
-                              <Button onClick={handleClickUserTable} style={{ marginRight: '50px', marginLeft: '10px', color: 'black' }} color="primary">
-                              {t('homepage.users')}
-                          </Button>
+                            {userData?.role === 'ADMIN' || userData?.role === 'MANAGER' ? (
+                                <Button onClick={handleClickUserTable} style={{ marginRight: '50px', marginLeft: '10px', color: 'black' }} color="primary">
+                                    {t('homepage.users')}
+                                </Button>
                             ) : null}
                         </div>
                         <div>
@@ -103,15 +153,71 @@ function Homepage() {
                     {userData ? (
                         <div style={{
                             backgroundColor: 'rgb(50, 68, 14)', color: 'whitesmoke',
-                            width: '400px', height: '325px',
+                            width: '400px', height: '475px',
                             fontFamily: 'Arial, Helvetica, sans-serif', padding: '20px'
                         }}>
                             <h1>{t('homepage.userInformations')}</h1>
+                            {userData.profilePicture ? (
+                                <Avatar
+                                    alt="Profile"
+                                    src={userData.profilePicture ? `data:image/jpeg;base64,${userData.profilePicture}` : "https://via.placeholder.com/150"}
+                                    sx={{ width: 150, height: 150, margin: '0 auto' }}
+                                />
+                            ) : (
+                                <img
+                                    src="https://via.placeholder.com/150" // Placeholder image
+                                    alt="No Profile"
+                                    style={{ width: '150px', height: '150px', borderRadius: '50%', marginBottom: '20px' }}
+                                />
+                            )}
+                            <input
+                                type="file"
+                                id="fileInput"
+                                style={{ display: 'none' }}
+                                accept="image/*"
+                                onChange={handleFileChange}
+                            />
+                            <Tooltip title="Upload New Profile Picture">
+                                <IconButton
+                                    component="label"
+                                    sx={{
+                                        color: 'whitesmoke',        // Change the icon color
+                                        backgroundColor: 'transparent', // No background color
+                                        border: 'none',                 // No border
+                                        boxShadow: 'none',              // No shadow
+                                        marginTop: '10px'
+                                    }}
+                                >
+                                    <UploadIcon sx={{ fontSize: 40 }} />
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleFileChange}
+                                        hidden
+                                    />
+                                </IconButton>
+                            </Tooltip>
+                            <Button
+                                sx={{
+                                    color: 'whitesmoke',
+                                    backgroundColor: 'transparent',
+                                    border: 'none',
+                                    boxShadow: 'none',
+                                    marginTop: '10px'
+                                }}
+                                variant="contained"
+                                color="primary"
+                                onClick={handleFileUpload}
+                                style={{ marginTop: '10px' }}
+                            >
+                                {t('homepage.uploadProfile')}
+                            </Button>
                             <p>{t('homepage.name')} {userData.firstName}</p>
                             <p>{t('homepage.surname')} {userData.lastName}</p>
                             <p>{t('homepage.company')} {userData.company}</p>
                             <p>{t('homepage.department')} {userData.department}</p>
                             <p>{t('homepage.role')} {userData.role}</p>
+
                         </div>
                     ) : (
                         <p>{t('homepage.dataLoading')}</p>
