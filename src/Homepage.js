@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Drawer, Button, Avatar, IconButton, Tooltip } from '@mui/material';
+import { Drawer, Button, Avatar, IconButton, Tooltip, Typography } from '@mui/material';
 import UploadIcon from '@mui/icons-material/Upload';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useTranslation } from 'react-i18next';
@@ -62,51 +62,46 @@ function Homepage() {
             });
     }, [navigate2]);
 
-    // Handle file selection
-    const handleFileChange = (event) => {
-        setSelectedFile(event.target.files[0]);
-    };
+    // Handle file selection and upload in one button click
+    const handleFileChangeAndUpload = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setSelectedFile(file);
 
-    // Handle profile picture upload
-    const handleFileUpload = () => {
-        if (!selectedFile) {
-            alert("Please select an image to upload");
-            return;
-        }
+            // Proceed with file upload
+            const formData = new FormData();
+            formData.append('file', file);  // Append the file to the formData
 
-        const formData = new FormData();
-        formData.append('file', selectedFile);  // Append the file to the formData
-
-        axios.post("https://delta1.eu-west-1.elasticbeanstalk.com/api/user/upload-profile-picture", formData, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'multipart/form-data'  // Ensure the content type is multipart
-            }
-        })
-            .then(response => {
-                console.log("Profile picture uploaded successfully", response.data);
-                alert("Profile picture uploaded successfully!");
-                setUserData(prevState => ({
-                    ...prevState,
-                    profilePicture: response.data.profilePicture  // Update the profile picture after successful upload
-                }));
-                window.location.reload();
+            axios.post("https://delta1.eu-west-1.elasticbeanstalk.com/api/user/upload-profile-picture", formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'  // Ensure the content type is multipart
+                }
             })
-            .catch(error => {
-                console.error("Error uploading profile picture:", error);
-                alert("Failed to upload profile picture. Please try again.");
-            });
-    };
-    const handleCloseSnackbar = (reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setSuccessSnackbarOpen(false);
-        setErrorSnackbarOpen(false);
-    };
+                .then(response => {
+                    console.log("Profile picture uploaded successfully", response.data);
+                    
 
-    const handleUploadButtonClick = () => {
-        document.getElementById("fileInput").click();
+                    // Re-fetch the user data to update the profile picture
+                    axios.get("https://delta1.eu-west-1.elasticbeanstalk.com/api/user/profile", {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    })
+                        .then((res) => {
+                            setUserData(res.data);
+                        })
+                        .catch((err) => {
+                            console.error('Error fetching updated user data:', err);
+                        });
+
+                        
+                })
+                .catch(error => {
+                    console.error("Error uploading profile picture:", error);
+                    alert("Failed to upload profile picture. Please try again.");
+                });
+        }
     };
 
 
@@ -170,48 +165,33 @@ function Homepage() {
                                     style={{ width: '150px', height: '150px', borderRadius: '50%', marginBottom: '20px' }}
                                 />
                             )}
+                          
                             <input
                                 type="file"
                                 id="fileInput"
                                 style={{ display: 'none' }}
                                 accept="image/*"
-                                onChange={handleFileChange}
+                                onChange={handleFileChangeAndUpload}
                             />
+
+                            {/* Styled Upload Button as Underlined Text */}
                             <Tooltip title="Upload New Profile Picture">
-                                <IconButton
-                                    component="label"
-                                    sx={{
-                                        color: 'whitesmoke',        // Change the icon color
-                                        backgroundColor: 'transparent', // No background color
-                                        border: 'none',                 // No border
-                                        boxShadow: 'none',              // No shadow
-                                        marginTop: '10px'
-                                    }}
-                                >
-                                    <UploadIcon sx={{ fontSize: 40 }} />
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handleFileChange}
-                                        hidden
-                                    />
-                                </IconButton>
+                                <label htmlFor="fileInput">
+                                    <Typography
+                                        variant="body1"
+                                        component="span"
+                                        style={{
+                                            color: '#1E90FF',
+                                            textDecoration: 'underline',
+                                            cursor: 'pointer',
+                                            marginTop: '10px'
+                                        }}
+                                    >
+                                        {t('homepage.uploadProfile')}
+                                    </Typography>
+                                </label>
                             </Tooltip>
-                            <Button
-                                sx={{
-                                    color: 'whitesmoke',
-                                    backgroundColor: 'transparent',
-                                    border: 'none',
-                                    boxShadow: 'none',
-                                    marginTop: '10px'
-                                }}
-                                variant="contained"
-                                color="primary"
-                                onClick={handleFileUpload}
-                                style={{ marginTop: '10px' }}
-                            >
-                                {t('homepage.uploadProfile')}
-                            </Button>
+
                             <p>{t('homepage.name')} {userData.firstName}</p>
                             <p>{t('homepage.surname')} {userData.lastName}</p>
                             <p>{t('homepage.company')} {userData.company}</p>
