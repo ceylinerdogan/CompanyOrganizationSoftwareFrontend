@@ -52,7 +52,8 @@ export default function UserTable() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [loggedIn, setLoggedIn] = useState(true);
 
-  const userRole = localStorage.getItem('role');
+  const managerDepartment = localStorage.getItem('userDepartment');
+  const userRole = localStorage.getItem('userRole');
   const token = localStorage.getItem('token');
   const navigate1 = useNavigate();
   const navigate2 = useNavigate();
@@ -72,6 +73,17 @@ export default function UserTable() {
     { id: 1, name: 'Genel Müdürlük' },
     { id: 2, name: 'Yazılım Geliştirme' }
   ];
+
+  let availableDepartments;
+
+if (userRole === 'ADMIN') {
+    // If the user is an admin, show all departments
+    availableDepartments = departments;
+} else if (userRole === 'MANAGER') {
+    // If the user is a manager, only show the manager's department
+    availableDepartments = departments.filter(department => department.name === managerDepartment);
+}
+
 
   // const getUsersById = (id) => {
   //   const link = "https://delta.eu-west-1.elasticbeanstalk.com/users/" + id;
@@ -208,9 +220,9 @@ export default function UserTable() {
       firstName: name,
       lastName: surname,
       email: email,
-      role: role, 
-      department: departmentFilter, 
-      company: companyFilter, 
+      role: role,
+      department: departmentFilter,
+      company: companyFilter,
     }
 
     console.log("edit", id);
@@ -245,20 +257,20 @@ export default function UserTable() {
 
   const handleFilteredClick = () => {
     console.log("Company filter:", companyFilter);
-  console.log("Department filter:", departmentFilter);
+    console.log("Department filter:", departmentFilter);
 
-  const filteredRows = rows.filter((row) => {
-    const companyName = row.company?.toLowerCase() || '';
-    const departmentName = row.department?.toLowerCase() || '';
+    const filteredRows = rows.filter((row) => {
+      const companyName = row.company?.toLowerCase() || '';
+      const departmentName = row.department?.toLowerCase() || '';
 
-    const companyMatches = !companyFilter || companyName.includes(companyFilter.toLowerCase());
-    const departmentMatches = !departmentFilter || departmentName.includes(departmentFilter.toLowerCase());
+      const companyMatches = !companyFilter || companyName.includes(companyFilter.toLowerCase());
+      const departmentMatches = !departmentFilter || departmentName.includes(departmentFilter.toLowerCase());
 
-    return companyMatches && departmentMatches;
-  });
+      return companyMatches && departmentMatches;
+    });
 
-  setFilteredRows(filteredRows);
-  setIsFilterOpen(false);
+    setFilteredRows(filteredRows);
+    setIsFilterOpen(false);
   };
 
   const handleAddClick = () => {
@@ -283,9 +295,9 @@ export default function UserTable() {
       firstName: name,
       lastName: surname,
       email: email,
-      role: role, 
-      department: departmentFilter,  
-      company: companyFilter, 
+      role: role,
+      department: departmentFilter,
+      company: companyFilter,
     };
     console.log(addData);
     console.log(token);
@@ -598,7 +610,7 @@ export default function UserTable() {
                 <FormControl style={{ width: '100%', left: '20px' }} >
                   <InputLabel>{t('usertable.department')}</InputLabel>
                   <Select value={departmentFilter} onChange={(e) => setDepartmentFilter(e.target.value)}>
-                    {departments.map((department) => (
+                    {availableDepartments.map((department) => (
                       <MenuItem key={department.id} value={department.name}>
                         {department.name}
                       </MenuItem>
@@ -732,10 +744,13 @@ export default function UserTable() {
                 </FormControl>
               </div>
               <div style={{ width: 300, marginBottom: '10px', display: 'flex', flexDirection: 'column' }}>
-                <FormControl style={{ width: '100%', left: '20px' }} >
+                <FormControl style={{ width: '100%', marginTop: '10px', left: '20px' }}>
                   <InputLabel>{t('usertable.department')}</InputLabel>
-                  <Select value={departmentFilter} onChange={(e) => setDepartmentFilter(e.target.value)}>
-                    {departments.map((department) => (
+                  <Select
+                    value={departmentFilter}
+                    onChange={(e) => setDepartmentFilter(e.target.value)}
+                  >
+                    {availableDepartments.map((department) => (
                       <MenuItem key={department.id} value={department.name}>
                         {department.name}
                       </MenuItem>

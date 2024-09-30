@@ -56,6 +56,8 @@ function Homepage() {
             .then((Response) => {
                 console.log("user found", Response.data);
                 setUserData(Response.data);  // Set user data directly from the response
+                localStorage.setItem('userDepartment', Response.data.department);
+                localStorage.setItem('userRole', Response.data.role);
             })
             .catch((Error) => {
                 console.error('user not found', Error);
