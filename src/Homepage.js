@@ -150,21 +150,22 @@ function Homepage() {
                     {userData ? (
                         <div style={{
                             backgroundColor: 'rgb(50, 68, 14)', color: 'whitesmoke',
-                            width: '400px', height: '475px',
-                            fontFamily: 'Arial, Helvetica, sans-serif', padding: '20px'
+                            width: '400px', height: '550px',
+                            fontFamily: 'Arial, Helvetica, sans-serif', padding: '20px',
+                            display: 'flex', flexDirection: 'column', alignItems: 'center'
                         }}>
                             <h1>{t('homepage.userInformations')}</h1>
                             {userData.profilePicture ? (
                                 <Avatar
                                     alt="Profile"
                                     src={userData.profilePicture ? `data:image/jpeg;base64,${userData.profilePicture}` : "https://via.placeholder.com/150"}
-                                    sx={{ width: 150, height: 150, margin: '0 auto' }}
+                                    sx={{ width: 150, height: 150, marginBottom: '20px' }}
                                 />
                             ) : (
-                                <img
-                                    src="https://via.placeholder.com/150" // Placeholder image
+                                <Avatar
+                                    icon="user"
                                     alt="No Profile"
-                                    style={{ width: '150px', height: '150px', borderRadius: '50%', marginBottom: '20px' }}
+                                    sx={{ width: '150px', height: '150px', borderRadius: '50%', marginBottom: '40px', }}
                                 />
                             )}
                           
